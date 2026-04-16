@@ -7,31 +7,97 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply bg-gray-50 text-gray-900 font-sans;
+    background-color: #ede8df;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 20% -10%, rgba(226,213,190,0.7) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 110%, rgba(193,217,188,0.35) 0%, transparent 55%);
+    background-attachment: fixed;
+    color: #1f2e1a;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100dvh;
   }
-  /* Safe area para iPhone */
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
 
 @layer components {
+  /* ── Liquid Glass ── */
+  .glass {
+    background: rgba(255, 252, 247, 0.55);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.65);
+  }
+  .glass-dark {
+    background: rgba(30, 42, 22, 0.72);
+    backdrop-filter: blur(16px) saturate(1.3);
+    -webkit-backdrop-filter: blur(16px) saturate(1.3);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+  }
+  .glass-sm {
+    background: rgba(255, 252, 247, 0.50);
+    backdrop-filter: blur(10px) saturate(1.3);
+    -webkit-backdrop-filter: blur(10px) saturate(1.3);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+
+  /* ── Botões ── */
   .btn-primary {
-    @apply w-full bg-brand-900 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform;
+    @apply w-full bg-ink-800 text-sand-50 font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all;
+    box-shadow: 0 2px 12px rgba(30,46,26,0.25);
   }
   .btn-secondary {
-    @apply w-full bg-white border border-gray-200 text-gray-800 font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform;
+    @apply w-full font-semibold py-3 px-4 rounded-2xl flex items-center justify-center gap-2 active:scale-95 transition-all;
+    background: rgba(255,252,247,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.55);
+    color: #1f2e1a;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
   }
+  .btn-ghost {
+    @apply font-medium py-2 px-3 rounded-xl flex items-center justify-center gap-1.5 active:scale-95 transition-all text-sm;
+    color: #2e4226;
+  }
+
+  /* ── Cards ── */
   .card {
-    @apply bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100;
+    @apply rounded-2xl overflow-hidden;
+    background: rgba(255, 252, 247, 0.55);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    border: 1px solid rgba(255, 255, 255, 0.62);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.65);
   }
+
+  /* ── Badge ── */
   .badge {
     @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
   }
+
+  /* ── Input ── */
   .input {
-    @apply w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white;
+    @apply w-full rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-ink-400;
+    background: rgba(255,252,247,0.7);
+    border: 1px solid rgba(255,255,255,0.6);
+    color: #1f2e1a;
   }
-  textarea.input {
-    @apply resize-none;
+  .input::placeholder { color: #9aad92; }
+  textarea.input { @apply resize-none; }
+
+  /* ── Pill tag ── */
+  .pill {
+    @apply text-xs font-medium px-2.5 py-1 rounded-full;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.6);
+    color: #3d5733;
+  }
+  .pill-active {
+    background: #2e4226;
+    color: #f5f0e8;
+    border-color: transparent;
   }
 }

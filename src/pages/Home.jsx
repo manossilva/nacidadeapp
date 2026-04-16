@@ -1,89 +1,146 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import PageShell from '../components/layout/PageShell'
-import CategoryFilter from '../components/layout/CategoryFilter'
 import FeaturedBanner from '../components/cards/FeaturedBanner'
-import PlaceCard from '../components/cards/PlaceCard'
 import EventCard from '../components/cards/EventCard'
-import { SkeletonBanner, SkeletonList } from '../components/ui/Skeleton'
-import { usePlaces, useEvents } from '../hooks/usePlaces'
+import PlaceCard from '../components/cards/PlaceCard'
+import NearbyCircles from '../components/cards/NearbyCircles'
+import { usePlaces, useEvents, useNearby } from '../hooks/usePlaces'
+import { useGeolocation } from '../hooks/useGeolocation'
+import { MOCK_PLACES, MOCK_EVENTS } from '../lib/mockData'
 
-function todayLabel() {
-  return new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
+function SectionLabel({ children, to, linkLabel = 'Ver tudo' }) {
+  return (
+    <div className="flex items-center justify-between mb-3">
+      <h2 className="font-bold text-base" style={{ color: '#1f2e1a' }}>{children}</h2>
+      {to && (
+        <Link to={to} className="text-xs font-semibold" style={{ color: '#3d5733' }}>
+          {linkLabel} →
+        </Link>
+      )}
+    </div>
+  )
 }
 
 export default function Home() {
-  const { events: featuredEvents, loading: loadingFE } = useEvents({ featured: true, period: 'week', limit: 1 })
-  const { events, loading: loadingEvents } = useEvents({ period: 'today', limit: 8 })
-  const { places, loading: loadingPlaces } = usePlaces({ limit: 8 })
+  const [useMock] = useState(true) // troca pra false quando Supabase estiver configurado
 
-  const featuredItem = featuredEvents[0] ?? null
+  const { events: supaEvents, loading: loadingFE } = useEvents({ featured: true, period: 'week', limit: 1 })
+  const { events: supaEventsToday, loading: loadingEvents } = useEvents({ period: 'today', limit: 6 })
+  const { places: supaPlaces, loading: loadingPlaces } = usePlaces({ limit: 6 })
+
+  const featuredItem = useMock ? MOCK_EVENTS[0] : (supaEvents[0] ?? null)
+  const events = useMock ? MOCK_EVENTS : supaEventsToday
+  const places = useMock ? MOCK_PLACES : supaPlaces
+  const loading = useMock ? false : (loadingFE || loadingEvents || loadingPlaces)
+
+  const { position, loading: geoLoading, request: requestGeo } = useGeolocation()
+  const { items: nearbyItems, loading: nearbyLoading } = useNearby({
+    lat: position?.lat,
+    lng: position?.lng,
+    radius: 1.5,
+    limit: 12,
+  })
+
+  const nearbyData = useMock && !position
+    ? MOCK_PLACES.map(p => ({ ...p, _type: 'place', _distance: Math.random() * 1.5 }))
+    : nearbyItems
+
+  const dayLabel = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
 
   return (
     <PageShell>
-      {/* Cabeçalho da home */}
-      <div className="pt-4 pb-3">
-        <h1 className="text-2xl font-bold text-gray-900">Hoje em Aju</h1>
-        <p className="text-sm text-gray-500 capitalize">{todayLabel()}</p>
+      {/* Saudação */}
+      <div className="pt-5 pb-4">
+        <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#9aad92' }}>
+          {dayLabel}
+        </p>
+        <h1 className="text-3xl font-bold leading-tight" style={{ color: '#1f2e1a' }}>
+          O que rola<br />em Aracaju hoje?
+        </h1>
       </div>
 
       {/* Banner destaque */}
-      {loadingFE ? (
-        <SkeletonBanner />
-      ) : featuredItem ? (
-        <FeaturedBanner item={featuredItem} type="event" />
-      ) : null}
+      {featuredItem && <FeaturedBanner item={featuredItem} type="event" />}
 
-      {/* Botão perto de mim */}
-      <Link
-        to="/perto-de-mim"
-        className="mt-3 flex items-center gap-2 bg-brand-50 border border-brand-200 text-brand-900 rounded-xl px-4 py-3 text-sm font-medium active:scale-95 transition-transform"
-      >
-        <span>📍</span>
-        <span>Mostrar perto de mim</span>
-        <span className="ml-auto text-brand-400">→</span>
-      </Link>
-
-      {/* Categorias */}
-      <section className="mt-5">
-        <CategoryFilter />
+      {/* Tá rolando agora — bolinhas */}
+      <section className="mt-6">
+        <SectionLabel to="/lugares">Tá rolando agora</SectionLabel>
+        <NearbyCircles
+          items={position ? nearbyItems : nearbyData}
+          loading={geoLoading || nearbyLoading}
+          hasLocation={!!position || useMock}
+          onRequestLocation={requestGeo}
+        />
       </section>
 
       {/* Eventos de hoje */}
-      <section className="mt-6">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-gray-900">Eventos de hoje</h2>
-          <Link to="/explorar" className="text-sm text-brand-700 font-medium">Ver todos</Link>
-        </div>
-        {loadingEvents ? (
-          <SkeletonList count={4} />
+      <section className="mt-7">
+        <SectionLabel to="/eventos">Eventos de hoje</SectionLabel>
+        {loading ? (
+          <SkeletonList />
         ) : events.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">Nenhum evento hoje. Volte amanhã!</p>
+          <Empty text="Nenhum evento hoje. Tenta amanhã!" />
         ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {events.map(event => <EventCard key={event.id} event={event} />)}
+          <div className="space-y-2">
+            {events.map(e => <EventCard key={e.id} event={e} compact />)}
           </div>
         )}
       </section>
 
-      {/* Bares e restaurantes */}
-      <section className="mt-6">
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="font-bold text-gray-900">Bares e restaurantes</h2>
-          <Link to="/explorar/gastronomia" className="text-sm text-brand-700 font-medium">Ver todos</Link>
+      {/* Lugares em destaque */}
+      <section className="mt-7">
+        <SectionLabel to="/lugares">Lugares que valem</SectionLabel>
+        {loading ? (
+          <SkeletonGrid />
+        ) : (
+          <div className="grid grid-cols-2 gap-3">
+            {places.map(p => <PlaceCard key={p.id} place={p} />)}
+          </div>
+        )}
+      </section>
+
+      {/* CTA Feed */}
+      <Link
+        to="/feed"
+        className="mt-6 flex items-center justify-between p-4 rounded-2xl active:scale-[0.98] transition-transform"
+        style={{
+          background: 'rgba(46,66,38,0.92)',
+          boxShadow: '0 4px 20px rgba(30,46,26,0.2)',
+        }}
+      >
+        <div>
+          <p className="font-bold text-sm" style={{ color: '#f5f0e8' }}>Quem tá colado agora?</p>
+          <p className="text-xs mt-0.5" style={{ color: 'rgba(245,240,232,0.6)' }}>Veja o feed de quem saiu hoje</p>
         </div>
-        {loadingPlaces ? (
-          <SkeletonList count={4} />
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {places.map(place => <PlaceCard key={place.id} place={place} />)}
-          </div>
-        )}
-      </section>
+        <span className="text-lg" style={{ color: 'rgba(245,240,232,0.7)' }}>→</span>
+      </Link>
 
-      {/* Rodapé de identidade */}
-      <footer className="mt-10 pb-4 text-center text-xs text-gray-400">
-        Feito com cuidado em Aracaju 🦀
-      </footer>
+      <div className="h-6" />
     </PageShell>
   )
+}
+
+function SkeletonList() {
+  return (
+    <div className="space-y-2">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="h-20 rounded-2xl animate-pulse" style={{ background: 'rgba(212,191,160,0.4)' }} />
+      ))}
+    </div>
+  )
+}
+
+function SkeletonGrid() {
+  return (
+    <div className="grid grid-cols-2 gap-3">
+      {[1, 2, 3, 4].map(i => (
+        <div key={i} className="aspect-[4/3] rounded-2xl animate-pulse" style={{ background: 'rgba(212,191,160,0.4)' }} />
+      ))}
+    </div>
+  )
+}
+
+function Empty({ text }) {
+  return <p className="text-sm py-4 text-center" style={{ color: '#9aad92' }}>{text}</p>
 }

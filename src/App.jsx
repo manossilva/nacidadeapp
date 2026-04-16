@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
-import Explore from './pages/Explore'
+import Lugares from './pages/Lugares'
+import Eventos from './pages/Eventos'
+import Feed from './pages/Feed'
 import Detail from './pages/Detail'
 import Nearby from './pages/Nearby'
 import AdminDashboard from './pages/admin/Dashboard'
@@ -16,11 +18,17 @@ export default function App() {
       <Routes>
         {/* Público */}
         <Route path="/" element={<Home />} />
-        <Route path="/explorar" element={<Explore />} />
-        <Route path="/explorar/:categoria" element={<Explore />} />
+        <Route path="/lugares" element={<Lugares />} />
+        <Route path="/lugares/:categoria" element={<Lugares />} />
+        <Route path="/eventos" element={<Eventos />} />
+        <Route path="/feed" element={<Feed />} />
         <Route path="/local/:slug" element={<Detail type="place" />} />
         <Route path="/evento/:slug" element={<Detail type="event" />} />
         <Route path="/perto-de-mim" element={<Nearby />} />
+
+        {/* Legado — redireciona explorar para lugares */}
+        <Route path="/explorar" element={<Navigate to="/lugares" replace />} />
+        <Route path="/explorar/:cat" element={<Navigate to="/lugares" replace />} />
 
         {/* Admin */}
         <Route path="/admin/login" element={<AdminLogin />} />
