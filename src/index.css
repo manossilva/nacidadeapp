@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+  }
+  /* Safe area para iPhone */
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply w-full bg-brand-900 text-white font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform;
+  }
+  .btn-secondary {
+    @apply w-full bg-white border border-gray-200 text-gray-800 font-semibold py-3 px-4 rounded-xl flex items-center justify-center gap-2 active:scale-95 transition-transform;
+  }
+  .card {
+    @apply bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium;
+  }
+  .input {
+    @apply w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 bg-white;
+  }
+  textarea.input {
+    @apply resize-none;
+  }
+}
