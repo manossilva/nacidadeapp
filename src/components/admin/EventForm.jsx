@@ -18,7 +18,6 @@ export default function EventForm({ initial = {}, onSaved, onCancel }) {
   const [form, setForm] = useState({
     name: '', category: 'show', description: '', short_description: '',
     custom_location: '', latitude: '', longitude: '',
-    starts_at: '', ends_at: '',
     ticket_url: '', price_info: '',
     organizer_name: '', organizer_whatsapp: '',
     plan_tier: 'free', is_published: false, is_featured: false,

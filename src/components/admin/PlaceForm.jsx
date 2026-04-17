@@ -20,7 +20,7 @@ export default function PlaceForm({ initial = {}, onSaved, onCancel }) {
     address: '', neighborhood: '', latitude: '', longitude: '',
     whatsapp: '', instagram: '', website: '', price_range: '$',
     plan_tier: 'free', is_published: false, is_featured: false,
-    tags: '', ...initial,
+    ...initial,
     tags: Array.isArray(initial.tags) ? initial.tags.join(', ') : (initial.tags ?? ''),
   })
   const [coverFile, setCoverFile] = useState(null)
