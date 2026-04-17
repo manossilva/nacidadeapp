@@ -1,18 +1,6 @@
 import { Link } from 'react-router-dom'
 import { formatDistance } from '../../lib/geolocation'
-
-function timeFromNow(isoString) {
-  const diff = new Date(isoString) - Date.now()
-  if (diff < 0) return 'Em andamento'
-  const h = Math.floor(diff / 3_600_000)
-  const m = Math.floor((diff % 3_600_000) / 60_000)
-  if (h > 24) {
-    const days = Math.floor(h / 24)
-    return `Em ${days} dia${days > 1 ? 's' : ''}`
-  }
-  if (h > 0) return `Em ${h}h${m > 0 ? ` ${m}min` : ''}`
-  return `Em ${m}min`
-}
+import { timeFromNow } from '../../lib/time'
 
 function formatDateShort(isoString) {
   return new Date(isoString).toLocaleDateString('pt-BR', {

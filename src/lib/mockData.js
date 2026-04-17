@@ -144,13 +144,17 @@ export const MOCK_EVENTS = [
   },
 ]
 
+const CACIQUE_CHA = MOCK_PLACES.find(p => p.slug === 'cacique-cha')
+const PIRILAMPO = MOCK_PLACES.find(p => p.slug === 'pirilampo')
+const FORRO_CACIQUE = MOCK_EVENTS.find(e => e.slug === 'forro-cacique-sexta-fogo')
+
 export const MOCK_FEED = [
   {
     id: 'feed-1',
     user: { name: 'Larissa M.', avatar: 'LM' },
     type: 'checkin',
-    place: MOCK_PLACES[0],
-    message: 'siri perfeito como sempre 🙌',
+    place: CACIQUE_CHA,
+    message: 'siri perfeito como sempre',
     colados: 14,
     createdAt: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
     comments: [
@@ -162,7 +166,7 @@ export const MOCK_FEED = [
     id: 'feed-2',
     user: { name: 'Gabriel S.', avatar: 'GS' },
     type: 'checkin',
-    event: MOCK_EVENTS[0],
+    event: FORRO_CACIQUE,
     message: 'começou e já tá lotado, vim cedo haha',
     colados: 31,
     createdAt: new Date(Date.now() - 70 * 60 * 1000).toISOString(),
@@ -174,7 +178,7 @@ export const MOCK_FEED = [
     id: 'feed-3',
     user: { name: 'Rebeca O.', avatar: 'RO' },
     type: 'checkin',
-    place: MOCK_PLACES[2],
+    place: PIRILAMPO,
     message: 'exposição nova no Pirilampo — recomendo demais',
     colados: 8,
     createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),

@@ -1,13 +1,17 @@
-import { useState, useEffect } from 'react'
+import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import PageShell from '../components/layout/PageShell'
 import FeaturedBanner from '../components/cards/FeaturedBanner'
 import EventCard from '../components/cards/EventCard'
 import PlaceCard from '../components/cards/PlaceCard'
 import NearbyCircles from '../components/cards/NearbyCircles'
+import Empty from '../components/ui/Empty'
 import { usePlaces, useEvents, useNearby } from '../hooks/usePlaces'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { MOCK_PLACES, MOCK_EVENTS } from '../lib/mockData'
+import { USE_MOCK } from '../lib/config'
+
+const dayLabel = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
 
 function SectionLabel({ children, to, linkLabel = 'Ver tudo' }) {
   return (
@@ -23,16 +27,14 @@ function SectionLabel({ children, to, linkLabel = 'Ver tudo' }) {
 }
 
 export default function Home() {
-  const [useMock] = useState(true) // troca pra false quando Supabase estiver configurado
+  const { events: supaEvents, loading: loadingFE } = useEvents({ featured: true, period: 'week', limit: 1, enabled: !USE_MOCK })
+  const { events: supaEventsToday, loading: loadingEvents } = useEvents({ period: 'today', limit: 6, enabled: !USE_MOCK })
+  const { places: supaPlaces, loading: loadingPlaces } = usePlaces({ limit: 6, enabled: !USE_MOCK })
 
-  const { events: supaEvents, loading: loadingFE } = useEvents({ featured: true, period: 'week', limit: 1 })
-  const { events: supaEventsToday, loading: loadingEvents } = useEvents({ period: 'today', limit: 6 })
-  const { places: supaPlaces, loading: loadingPlaces } = usePlaces({ limit: 6 })
-
-  const featuredItem = useMock ? MOCK_EVENTS[0] : (supaEvents[0] ?? null)
-  const events = useMock ? MOCK_EVENTS : supaEventsToday
-  const places = useMock ? MOCK_PLACES : supaPlaces
-  const loading = useMock ? false : (loadingFE || loadingEvents || loadingPlaces)
+  const featuredItem = USE_MOCK ? MOCK_EVENTS[0] : (supaEvents[0] ?? null)
+  const events = USE_MOCK ? MOCK_EVENTS : supaEventsToday
+  const places = USE_MOCK ? MOCK_PLACES : supaPlaces
+  const loading = USE_MOCK ? false : (loadingFE || loadingEvents || loadingPlaces)
 
   const { position, loading: geoLoading, request: requestGeo } = useGeolocation()
   const { items: nearbyItems, loading: nearbyLoading } = useNearby({
@@ -42,15 +44,14 @@ export default function Home() {
     limit: 12,
   })
 
-  const nearbyData = useMock && !position
-    ? MOCK_PLACES.map(p => ({ ...p, _type: 'place', _distance: Math.random() * 1.5 }))
-    : nearbyItems
-
-  const dayLabel = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })
+  const mockNearby = useMemo(
+    () => MOCK_PLACES.map(p => ({ ...p, _type: 'place', _distance: Math.random() * 1.5 })),
+    []
+  )
+  const nearbyData = position ? nearbyItems : (USE_MOCK ? mockNearby : nearbyItems)
 
   return (
     <PageShell>
-      {/* Saudação */}
       <div className="pt-5 pb-4">
         <p className="text-xs font-semibold uppercase tracking-widest mb-1" style={{ color: '#9aad92' }}>
           {dayLabel}
@@ -60,27 +61,24 @@ export default function Home() {
         </h1>
       </div>
 
-      {/* Banner destaque */}
       {featuredItem && <FeaturedBanner item={featuredItem} type="event" />}
 
-      {/* Tá rolando agora — bolinhas */}
       <section className="mt-6">
         <SectionLabel to="/lugares">Tá rolando agora</SectionLabel>
         <NearbyCircles
-          items={position ? nearbyItems : nearbyData}
+          items={nearbyData}
           loading={geoLoading || nearbyLoading}
-          hasLocation={!!position || useMock}
+          hasLocation={!!position || USE_MOCK}
           onRequestLocation={requestGeo}
         />
       </section>
 
-      {/* Eventos de hoje */}
       <section className="mt-7">
         <SectionLabel to="/eventos">Eventos de hoje</SectionLabel>
         {loading ? (
           <SkeletonList />
         ) : events.length === 0 ? (
-          <Empty text="Nenhum evento hoje. Tenta amanhã!" />
+          <Empty text="Nenhum evento hoje. Tenta amanhã!" py="py-4" />
         ) : (
           <div className="space-y-2">
             {events.map(e => <EventCard key={e.id} event={e} compact />)}
@@ -88,7 +86,6 @@ export default function Home() {
         )}
       </section>
 
-      {/* Lugares em destaque */}
       <section className="mt-7">
         <SectionLabel to="/lugares">Lugares que valem</SectionLabel>
         {loading ? (
@@ -100,14 +97,10 @@ export default function Home() {
         )}
       </section>
 
-      {/* CTA Feed */}
       <Link
         to="/feed"
         className="mt-6 flex items-center justify-between p-4 rounded-2xl active:scale-[0.98] transition-transform"
-        style={{
-          background: 'rgba(46,66,38,0.92)',
-          boxShadow: '0 4px 20px rgba(30,46,26,0.2)',
-        }}
+        style={{ background: 'rgba(46,66,38,0.92)', boxShadow: '0 4px 20px rgba(30,46,26,0.2)' }}
       >
         <div>
           <p className="font-bold text-sm" style={{ color: '#f5f0e8' }}>Quem tá colado agora?</p>
@@ -139,8 +132,4 @@ function SkeletonGrid() {
       ))}
     </div>
   )
-}
-
-function Empty({ text }) {
-  return <p className="text-sm py-4 text-center" style={{ color: '#9aad92' }}>{text}</p>
 }

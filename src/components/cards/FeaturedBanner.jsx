@@ -1,13 +1,5 @@
 import { Link } from 'react-router-dom'
-
-function timeFromNow(isoString) {
-  const diff = new Date(isoString) - Date.now()
-  if (diff < 0) return 'Em andamento agora'
-  const h = Math.floor(diff / 3_600_000)
-  const m = Math.floor((diff % 3_600_000) / 60_000)
-  if (h > 0) return `Começa em ${h}h${m > 0 ? ` ${m}min` : ''}`
-  return `Começa em ${m}min`
-}
+import { timeFromNow } from '../../lib/time'
 
 export default function FeaturedBanner({ item, type = 'event' }) {
   if (!item) return null

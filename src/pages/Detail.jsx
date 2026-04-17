@@ -4,8 +4,7 @@ import { supabase } from '../lib/supabase'
 import { whatsappLink, googleMapsRouteLink, shareWhatsappLink } from '../lib/whatsapp'
 import { trackInteraction } from '../lib/analytics'
 import { MOCK_PLACES, MOCK_EVENTS } from '../lib/mockData'
-
-const USE_MOCK = true
+import { USE_MOCK } from '../lib/config'
 
 function formatDate(iso) {
   if (!iso) return ''

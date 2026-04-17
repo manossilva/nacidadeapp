@@ -1,18 +1,9 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import PageShell from '../components/layout/PageShell'
 import { MOCK_FEED, MOCK_EVENTS, MOCK_PLACES } from '../lib/mockData'
 import { shareWhatsappLink } from '../lib/whatsapp'
-
-function timeAgo(isoString) {
-  const diff = Date.now() - new Date(isoString)
-  const m = Math.floor(diff / 60_000)
-  if (m < 1) return 'agora'
-  if (m < 60) return `${m}min atrás`
-  const h = Math.floor(m / 60)
-  if (h < 24) return `${h}h atrás`
-  return `${Math.floor(h / 24)}d atrás`
-}
+import { timeAgo } from '../lib/time'
 
 function Avatar({ initials, size = 'md' }) {
   const sz = size === 'sm' ? 'w-7 h-7 text-xs' : 'w-10 h-10 text-sm'
@@ -199,11 +190,11 @@ function FeedCard({ post, onColar, onComment }) {
 
 export default function Feed() {
   const [posts, setPosts] = useState(
-    MOCK_FEED.map(p => ({ ...p, _userColado: false }))
+    () => MOCK_FEED.map(p => ({ ...p, _userColado: false }))
   )
-  const [showCheckinModal, setShowCheckinModal] = useState(false)
-  const [checkinMsg, setCheckinMsg] = useState('')
-  const [selectedItem, setSelectedItem] = useState(null)
+  const [checkin, setCheckin] = useState(null) // null = closed, { item, msg } = open
+
+  const allItems = useMemo(() => [...MOCK_EVENTS, ...MOCK_PLACES], [])
 
   function handleColar(postId) {
     setPosts(prev =>
@@ -226,26 +217,22 @@ export default function Feed() {
   }
 
   function submitCheckin() {
-    if (!selectedItem) return
-    const isEvent = !!selectedItem.starts_at
-    const newPost = {
+    if (!checkin?.item) return
+    const { item, msg } = checkin
+    const isEvent = !!item.starts_at
+    setPosts(prev => [{
       id: `feed-${Date.now()}`,
       user: { name: 'Você', avatar: 'VC' },
       type: 'checkin',
-      [isEvent ? 'event' : 'place']: selectedItem,
-      message: checkinMsg,
+      [isEvent ? 'event' : 'place']: item,
+      message: msg,
       colados: 0,
       createdAt: new Date().toISOString(),
       comments: [],
       _userColado: false,
-    }
-    setPosts(prev => [newPost, ...prev])
-    setShowCheckinModal(false)
-    setCheckinMsg('')
-    setSelectedItem(null)
+    }, ...prev])
+    setCheckin(null)
   }
-
-  const allItems = [...MOCK_EVENTS, ...MOCK_PLACES]
 
   return (
     <PageShell>
@@ -256,7 +243,7 @@ export default function Feed() {
             <p className="text-sm mt-0.5" style={{ color: '#728c68' }}>Quem saiu hoje em Aju</p>
           </div>
           <button
-            onClick={() => setShowCheckinModal(true)}
+            onClick={() => setCheckin({ item: null, msg: '' })}
             className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-sm font-semibold active:scale-95 transition-all"
             style={{ background: '#2e4226', color: '#f5f0e8', boxShadow: '0 2px 12px rgba(30,46,26,0.25)' }}
           >
@@ -269,47 +256,35 @@ export default function Feed() {
         </div>
       </div>
 
-      {/* Posts */}
       <div className="mt-4 space-y-4">
         {posts.map(post => (
-          <FeedCard
-            key={post.id}
-            post={post}
-            onColar={handleColar}
-            onComment={handleComment}
-          />
+          <FeedCard key={post.id} post={post} onColar={handleColar} onComment={handleComment} />
         ))}
       </div>
 
-      {/* Modal: Tô colado */}
-      {showCheckinModal && (
+      {checkin !== null && (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center"
           style={{ background: 'rgba(15,22,10,0.5)', backdropFilter: 'blur(4px)' }}
-          onClick={e => { if (e.target === e.currentTarget) setShowCheckinModal(false) }}
+          onClick={e => { if (e.target === e.currentTarget) setCheckin(null) }}
         >
           <div
             className="w-full max-w-lg rounded-t-3xl p-6 pb-10"
-            style={{
-              background: 'rgba(240,235,226,0.95)',
-              backdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255,255,255,0.6)',
-            }}
+            style={{ background: 'rgba(240,235,226,0.95)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.6)' }}
           >
             <div className="w-10 h-1 rounded-full mx-auto mb-5" style={{ background: 'rgba(46,66,38,0.2)' }} />
             <h2 className="font-bold text-lg mb-4" style={{ color: '#1f2e1a' }}>Onde você tá colado?</h2>
 
-            {/* Seleção de lugar/evento */}
             <div className="space-y-2 max-h-40 overflow-y-auto mb-4">
               {allItems.map(item => (
                 <button
                   key={item.id}
-                  onClick={() => setSelectedItem(item)}
+                  onClick={() => setCheckin(c => ({ ...c, item }))}
                   className="w-full flex items-center gap-3 p-3 rounded-2xl text-left transition-all active:scale-[0.98]"
                   style={{
-                    background: selectedItem?.id === item.id ? '#2e4226' : 'rgba(255,252,247,0.6)',
+                    background: checkin.item?.id === item.id ? '#2e4226' : 'rgba(255,252,247,0.6)',
                     border: '1px solid rgba(255,255,255,0.6)',
-                    color: selectedItem?.id === item.id ? '#f5f0e8' : '#1f2e1a',
+                    color: checkin.item?.id === item.id ? '#f5f0e8' : '#1f2e1a',
                   }}
                 >
                   {item.cover_image_url && (
@@ -323,19 +298,14 @@ export default function Feed() {
               ))}
             </div>
 
-            {/* Mensagem opcional */}
             <input
-              value={checkinMsg}
-              onChange={e => setCheckinMsg(e.target.value)}
+              value={checkin.msg}
+              onChange={e => setCheckin(c => ({ ...c, msg: e.target.value }))}
               placeholder="Conta alguma coisa (opcional)..."
               className="input mb-4"
             />
 
-            <button
-              onClick={submitCheckin}
-              disabled={!selectedItem}
-              className="btn-primary disabled:opacity-40"
-            >
+            <button onClick={submitCheckin} disabled={!checkin.item} className="btn-primary disabled:opacity-40">
               Postar no feed
             </button>
           </div>

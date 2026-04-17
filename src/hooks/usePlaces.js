@@ -2,18 +2,15 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import { haversineDistance } from '../lib/geolocation'
 
-/**
- * Busca locais publicados com filtros opcionais.
- * @param {{ category?: string, featured?: boolean, limit?: number }} options
- */
-export function usePlaces({ category, featured, limit = 20 } = {}) {
+export function usePlaces({ category, featured, limit = 20, enabled = true } = {}) {
   const [places, setPlaces] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(enabled)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (!enabled) return
     let cancelled = false
-    async function fetch() {
+    async function run() {
       setLoading(true)
       let query = supabase
         .from('places')
@@ -32,25 +29,22 @@ export function usePlaces({ category, featured, limit = 20 } = {}) {
       else setPlaces(data ?? [])
       setLoading(false)
     }
-    fetch()
+    run()
     return () => { cancelled = true }
-  }, [category, featured, limit])
+  }, [category, featured, limit, enabled])
 
   return { places, loading, error }
 }
 
-/**
- * Busca eventos publicados, com filtro por período.
- * @param {{ category?: string, period?: 'today'|'tomorrow'|'week', featured?: boolean, limit?: number }} options
- */
-export function useEvents({ category, period, featured, limit = 20 } = {}) {
+export function useEvents({ category, period, featured, limit = 20, enabled = true } = {}) {
   const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(enabled)
   const [error, setError] = useState(null)
 
   useEffect(() => {
+    if (!enabled) return
     let cancelled = false
-    async function fetch() {
+    async function run() {
       setLoading(true)
       const now = new Date()
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString()
@@ -84,16 +78,13 @@ export function useEvents({ category, period, featured, limit = 20 } = {}) {
       else setEvents(data ?? [])
       setLoading(false)
     }
-    fetch()
+    run()
     return () => { cancelled = true }
-  }, [category, period, featured, limit])
+  }, [category, period, featured, limit, enabled])
 
   return { events, loading, error }
 }
 
-/**
- * Busca locais e eventos ordenados por distância a partir de uma coordenada.
- */
 export function useNearby({ lat, lng, radius = 5, limit = 30 } = {}) {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(false)
@@ -102,7 +93,7 @@ export function useNearby({ lat, lng, radius = 5, limit = 30 } = {}) {
   useEffect(() => {
     if (!lat || !lng) return
     let cancelled = false
-    async function fetch() {
+    async function run() {
       setLoading(true)
       const [{ data: places }, { data: events }] = await Promise.all([
         supabase
@@ -119,6 +110,7 @@ export function useNearby({ lat, lng, radius = 5, limit = 30 } = {}) {
       ])
       if (cancelled) return
 
+      const now = Date.now()
       const withDistance = [
         ...(places ?? []).map(p => ({ ...p, _type: 'place', _distance: haversineDistance(lat, lng, p.latitude, p.longitude) })),
         ...(events ?? []).map(e => ({ ...e, _type: 'event', _distance: haversineDistance(lat, lng, e.latitude, e.longitude) })),
@@ -130,7 +122,7 @@ export function useNearby({ lat, lng, radius = 5, limit = 30 } = {}) {
       setItems(withDistance)
       setLoading(false)
     }
-    fetch()
+    run()
     return () => { cancelled = true }
   }, [lat, lng, radius, limit])
 
