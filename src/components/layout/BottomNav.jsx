@@ -2,22 +2,14 @@ import { NavLink } from 'react-router-dom'
 
 const navItems = [
   { to: '/', label: 'Início', icon: HomeIcon, exact: true },
-  { to: '/lugares', label: 'Lugares', icon: PinIcon },
+  { to: '/onde-estou', label: 'Onde estou', icon: LocationIcon },
   { to: '/eventos', label: 'Eventos', icon: CalIcon },
-  { to: '/feed', label: 'Feed', icon: FeedIcon },
+  { to: '/configuracoes', label: 'Menu', icon: MenuIcon },
 ]
 
 export default function BottomNav() {
   return (
-    <nav
-      className="fixed bottom-0 left-0 right-0 z-40 safe-bottom"
-      style={{
-        background: 'rgba(237,232,223,0.78)',
-        backdropFilter: 'blur(20px) saturate(1.5)',
-        WebkitBackdropFilter: 'blur(20px) saturate(1.5)',
-        borderTop: '1px solid rgba(255,255,255,0.52)',
-      }}
-    >
+    <nav className="fixed bottom-0 left-0 right-0 z-40 safe-bottom nav-bg">
       <div className="max-w-lg mx-auto flex">
         {navItems.map(({ to, label, icon: Icon, exact }) => (
           <NavLink
@@ -26,7 +18,9 @@ export default function BottomNav() {
             end={exact}
             className={({ isActive }) =>
               `flex-1 flex flex-col items-center py-2.5 gap-0.5 text-[11px] font-medium transition-colors ${
-                isActive ? 'text-ink-800' : 'text-ink-400'
+                isActive
+                  ? 'text-ink-800 dark:text-sand-100'
+                  : 'text-ink-400 dark:text-ink-500'
               }`
             }
           >
@@ -51,7 +45,7 @@ function HomeIcon({ active }) {
   )
 }
 
-function PinIcon({ active }) {
+function LocationIcon({ active }) {
   return (
     <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 0 : 1.8} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -68,10 +62,10 @@ function CalIcon({ active }) {
   )
 }
 
-function FeedIcon({ active }) {
+function MenuIcon({ active }) {
   return (
-    <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 0 : 1.8} viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
+    <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={active ? 2.2 : 1.8} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
     </svg>
   )
 }

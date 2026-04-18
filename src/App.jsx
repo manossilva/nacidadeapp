@@ -8,6 +8,7 @@ import Nearby from './pages/Nearby'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import VerifyEmail from './pages/auth/VerifyEmail'
+import Settings from './pages/Settings'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminPlaces from './pages/admin/Places'
 import AdminEvents from './pages/admin/Events'
@@ -33,6 +34,10 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Register />} />
         <Route path="/verificar-email" element={<VerifyEmail />} />
+
+        {/* Configurações e onde estou */}
+        <Route path="/configuracoes" element={<Settings />} />
+        <Route path="/onde-estou" element={<Nearby />} />
 
         {/* Legado — redireciona explorar para lugares */}
         <Route path="/explorar" element={<Navigate to="/lugares" replace />} />

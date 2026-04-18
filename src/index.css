@@ -109,6 +109,10 @@
     border-color: transparent;
   }
 
+  /* ── Scrollbar none ── */
+  .scrollbar-none { scrollbar-width: none; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+
   /* ── Header background ── */
   .header-bg {
     background: rgba(237,232,223,0.75);
@@ -162,4 +166,25 @@
     background: #527044;
     color: #f5f0e8;
   }
+
+  /* ── Nav background ── */
+  .nav-bg {
+    background: rgba(237,232,223,0.82);
+    backdrop-filter: blur(20px) saturate(1.5);
+    -webkit-backdrop-filter: blur(20px) saturate(1.5);
+    border-top: 1px solid rgba(255,255,255,0.52);
+  }
+  .dark .nav-bg {
+    background: rgba(10,18,8,0.85);
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+}
+
+/* ── Animação da saudação ── */
+@keyframes greetIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.greeting-anim {
+  animation: greetIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

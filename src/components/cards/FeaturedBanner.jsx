@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom'
 import { timeFromNow } from '../../lib/time'
 
-export default function FeaturedBanner({ item, type = 'event' }) {
+export default function FeaturedBanner({ item, type = 'event', compact = false }) {
   if (!item) return null
   const to = type === 'event' ? `/evento/${item.slug}` : `/local/${item.slug}`
+  const ratio = compact ? '21/9' : '16/9'
 
   return (
     <Link
       to={to}
-      className="relative block rounded-3xl overflow-hidden active:scale-[0.98] transition-transform"
-      style={{ aspectRatio: '16/9', boxShadow: '0 8px 40px rgba(0,0,0,0.14)' }}
+      className="relative block rounded-2xl overflow-hidden active:scale-[0.98] transition-transform"
+      style={{ aspectRatio: ratio, boxShadow: '0 6px 28px rgba(0,0,0,0.12)' }}
     >
       {item.cover_image_url ? (
         <img src={item.cover_image_url} alt={item.name} className="w-full h-full object-cover" />
