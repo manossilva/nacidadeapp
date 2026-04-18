@@ -5,6 +5,9 @@ import Eventos from './pages/Eventos'
 import Feed from './pages/Feed'
 import Detail from './pages/Detail'
 import Nearby from './pages/Nearby'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
+import VerifyEmail from './pages/auth/VerifyEmail'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminPlaces from './pages/admin/Places'
 import AdminEvents from './pages/admin/Events'
@@ -25,6 +28,11 @@ export default function App() {
         <Route path="/local/:slug" element={<Detail type="place" />} />
         <Route path="/evento/:slug" element={<Detail type="event" />} />
         <Route path="/perto-de-mim" element={<Nearby />} />
+
+        {/* Auth de usuários */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/cadastro" element={<Register />} />
+        <Route path="/verificar-email" element={<VerifyEmail />} />
 
         {/* Legado — redireciona explorar para lugares */}
         <Route path="/explorar" element={<Navigate to="/lugares" replace />} />

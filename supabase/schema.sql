@@ -140,6 +140,39 @@ CREATE INDEX idx_interactions_type   ON interactions(interaction_type);
 CREATE INDEX idx_interactions_date   ON interactions(created_at);
 
 -- ============================================================
+-- PROFILES — perfis dos usuários cadastrados
+-- Criado automaticamente ao registrar via Supabase Auth
+-- ============================================================
+CREATE TABLE profiles (
+  id          UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name   TEXT,
+  avatar_url  TEXT,
+  created_at  TIMESTAMPTZ DEFAULT now(),
+  updated_at  TIMESTAMPTZ DEFAULT now()
+);
+
+CREATE TRIGGER profiles_updated_at
+  BEFORE UPDATE ON profiles
+  FOR EACH ROW EXECUTE FUNCTION update_updated_at();
+
+-- Cria perfil automaticamente quando um novo usuário se cadastra
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, full_name)
+  VALUES (
+    NEW.id,
+    NEW.raw_user_meta_data ->> 'full_name'
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+
+-- ============================================================
 -- ROW LEVEL SECURITY (RLS)
 -- Substitua o email abaixo pelo seu antes de rodar em produção
 -- ============================================================
@@ -189,6 +222,21 @@ CREATE POLICY "public_insert_interactions"
 
 CREATE POLICY "admin_read_interactions"
   ON interactions FOR SELECT
+  USING (auth.jwt() ->> 'email' = current_setting('app.admin_email', true));
+
+-- PROFILES: cada usuário lê e edita apenas o próprio perfil
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "user_read_own_profile"
+  ON profiles FOR SELECT
+  USING (auth.uid() = id);
+
+CREATE POLICY "user_update_own_profile"
+  ON profiles FOR UPDATE
+  USING (auth.uid() = id);
+
+CREATE POLICY "admin_full_profiles"
+  ON profiles FOR ALL
   USING (auth.jwt() ->> 'email' = current_setting('app.admin_email', true));
 
 -- ============================================================
