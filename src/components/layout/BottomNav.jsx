@@ -1,10 +1,11 @@
 import { NavLink } from 'react-router-dom'
 
 const navItems = [
-  { to: '/', label: 'Início', icon: HomeIcon, exact: true },
-  { to: '/onde-estou', label: 'Onde estou', icon: LocationIcon },
-  { to: '/eventos', label: 'Eventos', icon: CalIcon },
-  { to: '/configuracoes', label: 'Menu', icon: MenuIcon },
+  { to: '/',             label: 'Início',   icon: HomeIcon,     exact: true },
+  { to: '/onde-estou',   label: 'Onde estou', icon: LocationIcon },
+  { to: '/turismo',      label: 'Turismo',  icon: MapIcon },
+  { to: '/eventos',      label: 'Eventos',  icon: CalIcon },
+  { to: '/configuracoes',label: 'Menu',     icon: MenuIcon },
 ]
 
 export default function BottomNav() {
@@ -17,7 +18,7 @@ export default function BottomNav() {
             to={to}
             end={exact}
             className={({ isActive }) =>
-              `flex-1 flex flex-col items-center py-2.5 gap-0.5 text-[11px] font-medium transition-colors ${
+              `flex-1 flex flex-col items-center py-2 gap-0.5 text-[10px] font-medium transition-colors ${
                 isActive
                   ? 'text-ink-800 dark:text-sand-100'
                   : 'text-ink-400 dark:text-ink-500'
@@ -50,6 +51,14 @@ function LocationIcon({ active }) {
     <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 0 : 1.8} viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
       <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  )
+}
+
+function MapIcon({ active }) {
+  return (
+    <svg className="w-5 h-5" fill={active ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={active ? 0 : 1.8} viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
     </svg>
   )
 }

@@ -5,6 +5,9 @@ import Eventos from './pages/Eventos'
 import Feed from './pages/Feed'
 import Detail from './pages/Detail'
 import Nearby from './pages/Nearby'
+import Tourism from './pages/Tourism'
+import Roteiros from './pages/Roteiros'
+import ShareCard from './pages/ShareCard'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import VerifyEmail from './pages/auth/VerifyEmail'
@@ -29,17 +32,24 @@ export default function App() {
         <Route path="/local/:slug" element={<Detail type="place" />} />
         <Route path="/evento/:slug" element={<Detail type="event" />} />
         <Route path="/perto-de-mim" element={<Nearby />} />
+        <Route path="/onde-estou" element={<Nearby />} />
 
-        {/* Auth de usuários */}
+        {/* Turismo */}
+        <Route path="/turismo" element={<Tourism />} />
+        <Route path="/roteiros" element={<Roteiros />} />
+
+        {/* Compartilhar — estilo Strava */}
+        <Route path="/compartilhar/:type/:slug" element={<ShareCard />} />
+
+        {/* Auth */}
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Register />} />
         <Route path="/verificar-email" element={<VerifyEmail />} />
 
-        {/* Configurações e onde estou */}
+        {/* Configurações */}
         <Route path="/configuracoes" element={<Settings />} />
-        <Route path="/onde-estou" element={<Nearby />} />
 
-        {/* Legado — redireciona explorar para lugares */}
+        {/* Legado */}
         <Route path="/explorar" element={<Navigate to="/lugares" replace />} />
         <Route path="/explorar/:cat" element={<Navigate to="/lugares" replace />} />
 

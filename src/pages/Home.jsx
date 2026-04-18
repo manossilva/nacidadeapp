@@ -6,17 +6,18 @@ import EventCard from '../components/cards/EventCard'
 import PlaceCard from '../components/cards/PlaceCard'
 import NearbyCircles from '../components/cards/NearbyCircles'
 import Empty from '../components/ui/Empty'
+import { IcStar, IcParty, IcMusic, IcUsers, IcCross } from '../components/ui/Icons'
 import { usePlaces, useEvents, useNearby } from '../hooks/usePlaces'
 import { useGeolocation } from '../hooks/useGeolocation'
 import { MOCK_PLACES, MOCK_EVENTS } from '../lib/mockData'
 import { USE_MOCK } from '../lib/config'
 
 const SEGMENTS = [
-  { id: 'todos',    label: 'Todos',     emoji: '✨', categories: [] },
-  { id: 'publico',  label: 'Público',   emoji: '🎉', categories: ['cultural', 'esportivo', 'festival'] },
-  { id: 'festa',    label: 'Festa',     emoji: '🎊', categories: ['festival'] },
-  { id: 'show',     label: 'Show',      emoji: '🎸', categories: ['show'] },
-  { id: 'religioso',label: 'Religioso', emoji: '🕊️', categories: ['outro'] },
+  { id: 'todos',    label: 'Todos',     Icon: IcStar,   categories: [] },
+  { id: 'publico',  label: 'Público',   Icon: IcUsers,  categories: ['cultural', 'esportivo', 'festival'] },
+  { id: 'festa',    label: 'Festa',     Icon: IcParty,  categories: ['festival'] },
+  { id: 'show',     label: 'Show',      Icon: IcMusic,  categories: ['show'] },
+  { id: 'religioso',label: 'Religioso', Icon: IcCross,  categories: ['outro'] },
 ]
 
 function greeting() {
@@ -107,16 +108,16 @@ export default function Home() {
 
         {/* Tabs de segmento */}
         <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-none">
-          {SEGMENTS.map(s => (
+          {SEGMENTS.map(({ id, label, Icon }) => (
             <button
-              key={s.id}
-              onClick={() => setSegment(s.id)}
+              key={id}
+              onClick={() => setSegment(id)}
               className={`flex-none flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all active:scale-95 ${
-                segment === s.id ? 'pill-active' : 'pill'
+                segment === id ? 'pill-active' : 'pill'
               }`}
             >
-              <span>{s.emoji}</span>
-              <span>{s.label}</span>
+              <Icon className="w-3.5 h-3.5" />
+              <span>{label}</span>
             </button>
           ))}
         </div>
