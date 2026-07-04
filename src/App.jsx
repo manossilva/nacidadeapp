@@ -28,6 +28,7 @@ export default function App() {
         <Route path="/lugares" element={<Lugares />} />
         <Route path="/lugares/:categoria" element={<Lugares />} />
         <Route path="/eventos" element={<Eventos />} />
+        <Route path="/agenda-publica" element={<Eventos />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/local/:slug" element={<Detail type="place" />} />
         <Route path="/evento/:slug" element={<Detail type="event" />} />

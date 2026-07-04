@@ -1,17 +1,17 @@
 import { NavLink } from 'react-router-dom'
 
 const navItems = [
-  { to: '/',             label: 'Início',   icon: HomeIcon,     exact: true },
-  { to: '/onde-estou',   label: 'Onde estou', icon: LocationIcon },
-  { to: '/turismo',      label: 'Turismo',  icon: MapIcon },
-  { to: '/eventos',      label: 'Eventos',  icon: CalIcon },
-  { to: '/configuracoes',label: 'Menu',     icon: MenuIcon },
+  { to: '/',             label: 'Início',  icon: HomeIcon,     exact: true },
+  { to: '/onde-estou',   label: 'Locais',  icon: LocationIcon },
+  { to: '/eventos',      label: 'Agenda',  icon: CalIcon },
+  { to: '/turismo',      label: 'Turismo', icon: MapIcon },
+  { to: '/configuracoes',label: 'Menu',    icon: MenuIcon },
 ]
 
 export default function BottomNav() {
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 safe-bottom nav-bg">
-      <div className="max-w-lg mx-auto flex">
+      <div className="max-w-2xl mx-auto flex">
         {navItems.map(({ to, label, icon: Icon, exact }) => (
           <NavLink
             key={to}
