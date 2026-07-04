@@ -7,11 +7,10 @@ import { useGooglePlaces } from '../hooks/useGooglePlaces'
 import { IcRoute, IcSearch, IcPin, IcMap } from '../components/ui/Icons'
 
 const SECTIONS = [
-  { id: 'tourist_attraction', label: 'Atrações',    emoji: '🏛️' },
-  { id: 'restaurant',         label: 'Restaurantes', emoji: '🍽️' },
-  { id: 'museum',             label: 'Museus',       emoji: '🎭' },
-  { id: 'lodging',            label: 'Hospedagem',   emoji: '🏨' },
-  { id: 'park',               label: 'Parques',      emoji: '🌿' },
+  { id: 'church',    label: 'Igrejas', emoji: '⛪' },
+  { id: 'bar',       label: 'Bares',   emoji: '🍺' },
+  { id: 'cafe',      label: 'Cafés',   emoji: '☕' },
+  { id: 'night_club', label: 'Shows',  emoji: '🎵' },
 ]
 
 const TIPS = [
@@ -41,7 +40,7 @@ export default function Tourism() {
     requestGPS,
   } = useLocation()
 
-  const [section, setSection] = useState('tourist_attraction')
+  const [section, setSection] = useState('church')
 
   const { places, loading, error, noKey } = useGooglePlaces({
     lat: position?.lat,

@@ -3,34 +3,20 @@ import { Link } from 'react-router-dom'
 import PageShell from '../components/layout/PageShell'
 import FeaturedBanner from '../components/cards/FeaturedBanner'
 import EventCard from '../components/cards/EventCard'
-import PlaceCard from '../components/cards/PlaceCard'
-import NearbyCircles from '../components/cards/NearbyCircles'
 import Empty from '../components/ui/Empty'
-import { IcStar, IcParty, IcMusic, IcUsers, IcCross, IcPin, IcMap } from '../components/ui/Icons'
-import { usePlaces, useEvents, useNearby } from '../hooks/usePlaces'
+import { IcPin, IcMap, IcStar } from '../components/ui/Icons'
+import { useEvents } from '../hooks/usePlaces'
 import { useLocation } from '../hooks/useLocation'
 import { useGooglePlaces } from '../hooks/useGooglePlaces'
-import { MOCK_PLACES, MOCK_EVENTS } from '../lib/mockData'
-import { USE_MOCK } from '../lib/config'
 import { getPhotoUrl, typeLabel } from '../lib/googlePlaces'
 import { formatDistance } from '../lib/geolocation'
 
-const SEGMENTS = [
-  { id: 'todos',     label: 'Todos',     Icon: IcStar,   categories: [] },
-  { id: 'publico',   label: 'Público',   Icon: IcUsers,  categories: ['cultural', 'esportivo', 'festival'] },
-  { id: 'festa',     label: 'Festa',     Icon: IcParty,  categories: ['festival'] },
-  { id: 'show',      label: 'Show',      Icon: IcMusic,  categories: ['show'] },
-  { id: 'religioso', label: 'Religioso', Icon: IcCross,  categories: ['outro'] },
-]
-
 const BUSINESS_TYPES = [
-  { id: null,           label: 'Todos' },
-  { id: 'restaurant',   label: 'Restaurantes' },
-  { id: 'church',       label: 'Igrejas' },
-  { id: 'bar',          label: 'Bares' },
-  { id: 'cafe',         label: 'Cafés' },
-  { id: 'tourist_attraction', label: 'Atrações' },
-  { id: 'supermarket',  label: 'Mercados' },
+  { id: null,        label: 'Todos' },
+  { id: 'church',    label: 'Igrejas' },
+  { id: 'bar',       label: 'Bares' },
+  { id: 'cafe',      label: 'Cafés' },
+  { id: 'night_club', label: 'Shows' },
 ]
 
 function greeting() {
@@ -72,8 +58,7 @@ function BusinessCard({ place }) {
       <div className="relative h-28 bg-sand-200 dark:bg-ink-800">
         {photo ? (
           <img
-            src={photo}
-            alt={name}
+            src={photo} alt={name}
             className="w-full h-full object-cover"
             loading="lazy"
             onError={() => setImgErr(true)}
@@ -118,25 +103,15 @@ function BusinessCard({ place }) {
 }
 
 export default function Home() {
-  const [segment, setSegment] = useState('todos')
   const [bizType, setBizType] = useState(null)
   const { text: greetText, emoji: greetEmoji } = greeting()
 
-  const { events: supaFeatured } = useEvents({ featured: true, period: 'week', limit: 1, enabled: !USE_MOCK })
-  const { events: supaEvents, loading: loadingEvents } = useEvents({ limit: 20, enabled: !USE_MOCK })
-  const { places: supaPlaces, loading: loadingPlaces } = usePlaces({ limit: 6, enabled: !USE_MOCK })
+  const { events: featuredEvents } = useEvents({ featured: true, period: 'week', limit: 1 })
+  const { events: agendaEvents, loading: loadingEvents } = useEvents({ limit: 20 })
 
-  const featuredItem = USE_MOCK ? MOCK_EVENTS[0] : (supaFeatured[0] ?? null)
-  const allEvents    = USE_MOCK ? MOCK_EVENTS : supaEvents
-  const places       = USE_MOCK ? MOCK_PLACES : supaPlaces
+  const featuredItem = featuredEvents[0] ?? null
 
-  const {
-    position,
-    cityName,
-    radiusKm,
-    loading: geoLoading,
-    requestGPS,
-  } = useLocation()
+  const { position, cityName, radiusKm, loading: geoLoading, requestGPS } = useLocation()
 
   const { places: nearbyBusinesses, loading: bizLoading } = useGooglePlaces({
     lat: position?.lat,
@@ -144,18 +119,6 @@ export default function Home() {
     radiusKm,
     type: bizType,
   })
-
-  const { items: nearbyItems, loading: nearbyLoading } = useNearby({
-    lat: position?.lat,
-    lng: position?.lng,
-    radius: 1.5,
-    limit: 12,
-  })
-
-  const seg = SEGMENTS.find(s => s.id === segment)
-  const filteredEvents = seg?.categories.length
-    ? allEvents.filter(e => seg.categories.includes(e.category))
-    : allEvents
 
   return (
     <PageShell>
@@ -172,18 +135,17 @@ export default function Home() {
         </p>
       </div>
 
-      {/* Featured banner */}
+      {/* Destaque — evento em alta da agenda pública */}
       {featuredItem && (
         <div className="mb-5">
           <FeaturedBanner item={featuredItem} type="event" compact />
         </div>
       )}
 
-      {/* Empresas próximas — Google Places */}
+      {/* Perto de mim — Google Places */}
       <section className="mb-6">
-        <SectionLabel to="/onde-estou" linkLabel="Ver mais">Empresas próximas</SectionLabel>
+        <SectionLabel to="/onde-estou" linkLabel="Ver mais">Perto de mim</SectionLabel>
 
-        {/* Type filter */}
         {position && (
           <div className="flex gap-2 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-none mb-3">
             {BUSINESS_TYPES.map(bt => (
@@ -200,13 +162,12 @@ export default function Home() {
           </div>
         )}
 
-        {/* Prompt to enable location */}
         {!position && !geoLoading && (
           <div className="glass rounded-2xl p-4 flex items-center gap-3">
             <IcPin className="w-5 h-5 text-ink-500 dark:text-sand-300 flex-none" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-ink-700 dark:text-sand-200">Ative a localização</p>
-              <p className="text-xs text-ink-400 mt-0.5">Para ver restaurantes, igrejas e mais perto de você</p>
+              <p className="text-xs text-ink-400 mt-0.5">Para ver igrejas, bares, cafés e shows perto de você</p>
             </div>
             <button onClick={requestGPS} className="text-xs font-bold text-ink-700 dark:text-sand-200 whitespace-nowrap">
               Ativar →
@@ -214,7 +175,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Skeleton */}
         {(geoLoading || (position && bizLoading)) && (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[1, 2, 3, 4, 5, 6].map(i => (
@@ -224,7 +184,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* Results grid */}
         {position && !bizLoading && nearbyBusinesses.length > 0 && (
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {nearbyBusinesses.slice(0, 12).map(p => (
@@ -234,66 +193,28 @@ export default function Home() {
         )}
 
         {position && !bizLoading && nearbyBusinesses.length === 0 && (
-          <p className="text-sm text-ink-400 dark:text-ink-500">Nenhuma empresa encontrada nesse raio.</p>
+          <p className="text-sm text-ink-400 dark:text-ink-500">Nenhum local encontrado nesse raio.</p>
         )}
       </section>
 
-      {/* Tá rolando perto (Supabase) */}
-      <section className="mb-6">
-        <SectionLabel to="/onde-estou">Tá rolando perto</SectionLabel>
-        <NearbyCircles
-          items={nearbyItems}
-          loading={geoLoading || nearbyLoading}
-          hasLocation={!!position}
-          onRequestLocation={requestGPS}
-        />
-      </section>
-
-      {/* Segmentos + Eventos */}
+      {/* Agenda Pública */}
       <section>
-        <SectionLabel to="/eventos" linkLabel="Ver agenda">O que vai rolar</SectionLabel>
+        <SectionLabel to="/eventos" linkLabel="Ver agenda">Agenda Pública</SectionLabel>
 
-        <div className="flex gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-none">
-          {SEGMENTS.map(({ id, label, Icon }) => (
-            <button
-              key={id}
-              onClick={() => setSegment(id)}
-              className={`flex-none flex items-center gap-1.5 px-3.5 py-2 rounded-2xl text-sm font-semibold whitespace-nowrap transition-all active:scale-95 ${
-                segment === id ? 'pill-active' : 'pill'
-              }`}
-            >
-              <Icon className="w-3.5 h-3.5" />
-              <span>{label}</span>
-            </button>
-          ))}
-        </div>
-
-        <div className="mt-3 space-y-2">
+        <div className="space-y-2">
           {loadingEvents ? (
             <SkeletonList />
-          ) : filteredEvents.length === 0 ? (
-            <Empty text={`Nenhum evento ${seg?.label?.toLowerCase() ?? ''} por enquanto.`} py="py-6" />
+          ) : agendaEvents.length === 0 ? (
+            <Empty text="Nenhum evento na agenda por enquanto." py="py-6" />
           ) : (
-            filteredEvents.slice(0, 6).map(e => <EventCard key={e.id} event={e} compact />)
+            agendaEvents.slice(0, 6).map(e => <EventCard key={e.id} event={e} compact />)
           )}
         </div>
 
-        {filteredEvents.length > 6 && (
+        {agendaEvents.length > 6 && (
           <Link to="/eventos" className="mt-3 flex justify-center text-sm font-semibold text-ink-600 dark:text-sand-400">
-            Ver todos os eventos →
+            Ver toda a agenda →
           </Link>
-        )}
-      </section>
-
-      {/* Lugares */}
-      <section className="mt-7">
-        <SectionLabel to="/lugares">Lugares que valem</SectionLabel>
-        {loadingPlaces ? (
-          <SkeletonGrid />
-        ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            {places.slice(0, 6).map(p => <PlaceCard key={p.id} place={p} />)}
-          </div>
         )}
       </section>
 
@@ -319,16 +240,6 @@ function SkeletonList() {
     <div className="space-y-2">
       {[1, 2, 3].map(i => (
         <div key={i} className="h-20 rounded-2xl animate-pulse" style={{ background: 'rgba(212,191,160,0.35)' }} />
-      ))}
-    </div>
-  )
-}
-
-function SkeletonGrid() {
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-      {[1, 2, 3, 4].map(i => (
-        <div key={i} className="aspect-[4/3] rounded-2xl animate-pulse" style={{ background: 'rgba(212,191,160,0.35)' }} />
       ))}
     </div>
   )

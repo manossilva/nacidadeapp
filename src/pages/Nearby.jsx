@@ -6,29 +6,20 @@ import { useGooglePlaces } from '../hooks/useGooglePlaces'
 import { IcPin, IcSearch, IcMap } from '../components/ui/Icons'
 
 const TYPES = [
-  { id: null,               label: 'Todos' },
-  { id: 'restaurant',       label: 'Restaurantes' },
-  { id: 'bar',              label: 'Bares' },
-  { id: 'cafe',             label: 'Cafés' },
-  { id: 'night_club',       label: 'Baladas' },
-  { id: 'tourist_attraction', label: 'Atrações' },
-  { id: 'lodging',          label: 'Hotéis' },
-  { id: 'museum',           label: 'Museus' },
-  { id: 'park',             label: 'Parques' },
-  { id: 'church',           label: 'Igrejas' },
-  { id: 'supermarket',      label: 'Mercados' },
+  { id: null,        label: 'Todos' },
+  { id: 'church',    label: 'Igrejas' },
+  { id: 'bar',       label: 'Bares' },
+  { id: 'cafe',      label: 'Cafés' },
+  { id: 'night_club', label: 'Shows' },
 ]
 
 const RADII = [1, 2, 3, 5, 8, 10, 15, 20]
 
 const CATEGORY_GROUPS = [
-  { label: 'Restaurantes & Cafés',  types: ['restaurant', 'cafe', 'bakery', 'meal_delivery', 'meal_takeaway'] },
-  { label: 'Bares & Baladas',       types: ['bar', 'night_club'] },
-  { label: 'Igrejas & Religiosos',  types: ['church', 'hindu_temple', 'mosque', 'synagogue'] },
-  { label: 'Atrações & Museus',     types: ['tourist_attraction', 'museum', 'art_gallery', 'amusement_park', 'aquarium', 'zoo'] },
-  { label: 'Hotéis & Hospedagem',   types: ['lodging', 'campground', 'rv_park'] },
-  { label: 'Parques & Natureza',    types: ['park', 'natural_feature', 'campground'] },
-  { label: 'Compras & Serviços',    types: ['supermarket', 'shopping_mall', 'store', 'pharmacy', 'bank', 'gas_station', 'beauty_salon', 'gym'] },
+  { label: 'Igrejas',    types: ['church', 'hindu_temple', 'mosque', 'synagogue'] },
+  { label: 'Bares',      types: ['bar'] },
+  { label: 'Cafés',      types: ['cafe', 'bakery'] },
+  { label: 'Shows',      types: ['night_club'] },
 ]
 
 function groupPlaces(places) {
