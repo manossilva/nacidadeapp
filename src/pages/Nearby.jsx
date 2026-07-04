@@ -1,9 +1,8 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useMemo } from 'react'
 import PageShell from '../components/layout/PageShell'
 import GooglePlaceCard from '../components/cards/GooglePlaceCard'
 import { useLocation } from '../hooks/useLocation'
 import { useGooglePlaces } from '../hooks/useGooglePlaces'
-import { geocodePlace } from '../lib/geocoding'
 import { IcPin, IcSearch, IcMap } from '../components/ui/Icons'
 
 const TYPES = [
@@ -47,86 +46,6 @@ function groupPlaces(places) {
   return grouped
 }
 
-function LocationPicker({ cityName, loading, error, onRequestGPS, onSelectCity }) {
-  const [query, setQuery]           = useState('')
-  const [suggestions, setSuggestions] = useState([])
-  const [searching, setSearching]   = useState(false)
-  const [focused, setFocused]       = useState(false)
-
-  useEffect(() => {
-    const q = query.trim()
-    if (!q) { setSuggestions([]); return }
-    const t = setTimeout(async () => {
-      setSearching(true)
-      try { setSuggestions(await geocodePlace(q)) } catch {}
-      setSearching(false)
-    }, 500)
-    return () => clearTimeout(t)
-  }, [query])
-
-  return (
-    <div className="relative mb-4">
-      <div className="flex gap-2">
-        {/* Search input */}
-        <div className="flex-1 relative">
-          <IcSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none" />
-          <input
-            className="input pl-9 pr-3 w-full"
-            placeholder={cityName ? `${cityName} — trocar cidade` : 'Buscar cidade ou local...'}
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setTimeout(() => { setFocused(false); setQuery('') }, 200)}
-          />
-        </div>
-
-        {/* GPS button */}
-        <button
-          onClick={onRequestGPS}
-          disabled={loading}
-          className="flex-none glass rounded-xl px-3 py-2.5 flex items-center gap-1.5 text-xs font-semibold text-ink-700 dark:text-sand-200 whitespace-nowrap active:scale-95 transition-all disabled:opacity-60"
-        >
-          <IcPin className="w-3.5 h-3.5" />
-          {loading ? '...' : 'GPS'}
-        </button>
-      </div>
-
-      {/* Suggestions dropdown */}
-      {focused && (suggestions.length > 0 || searching) && (
-        <div className="absolute top-full left-0 right-0 z-30 mt-1 rounded-2xl shadow-xl overflow-hidden"
-          style={{ background: 'rgba(255,252,247,0.97)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.7)' }}>
-          {searching && (
-            <div className="px-4 py-3 text-xs text-ink-400 dark:text-ink-500">Buscando...</div>
-          )}
-          {suggestions.map((s, i) => (
-            <button
-              key={i}
-              onMouseDown={() => {
-                onSelectCity(s)
-                setSuggestions([])
-              }}
-              className="w-full text-left px-4 py-3 hover:bg-black/5 transition-colors border-b border-black/5 last:border-0"
-            >
-              <p className="font-semibold text-sm text-ink-800">{s.shortName}</p>
-              <p className="text-xs text-ink-400 truncate">{s.name}</p>
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Current location label */}
-      {cityName && !focused && (
-        <p className="text-xs text-ink-400 dark:text-ink-500 mt-1.5 flex items-center gap-1">
-          <IcPin className="w-3 h-3 flex-none" />
-          {cityName}
-        </p>
-      )}
-
-      {error && <p className="text-xs text-red-500 dark:text-red-400 mt-1">{error}</p>}
-    </div>
-  )
-}
-
 function SkeletonGrid() {
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -140,9 +59,9 @@ function SkeletonGrid() {
 
 export default function Nearby() {
   const {
-    position, cityName, radiusKm,
-    loading: locLoading, error: locError,
-    requestGPS, setManualLocation, setRadius,
+    position, radiusKm,
+    loading: locLoading,
+    requestGPS, setRadius,
   } = useLocation()
 
   const [type, setType] = useState(null)
@@ -175,15 +94,6 @@ export default function Nearby() {
           </p>
         )}
       </div>
-
-      {/* Location picker */}
-      <LocationPicker
-        cityName={cityName}
-        loading={locLoading}
-        error={locError}
-        onRequestGPS={requestGPS}
-        onSelectCity={({ shortName, lat, lng }) => setManualLocation({ name: shortName, lat, lng })}
-      />
 
       {/* No API key */}
       {noKey && (

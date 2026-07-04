@@ -21,7 +21,12 @@ export function useGooglePlaces({ lat, lng, radiusKm = 5, type = null }) {
           ...p,
           _distance: haversineDistance(lat, lng, p.location.latitude, p.location.longitude),
         }))
-        .sort((a, b) => a._distance - b._distance)
+        .sort((a, b) => {
+          const aOpen = a.currentOpeningHours?.openNow === true ? 0 : 1
+          const bOpen = b.currentOpeningHours?.openNow === true ? 0 : 1
+          if (aOpen !== bOpen) return aOpen - bOpen
+          return a._distance - b._distance
+        })
       setPlaces(withDist)
     } catch (e) {
       if (e.message === 'no_key') setNoKey(true)
