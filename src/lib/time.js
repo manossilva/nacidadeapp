@@ -28,3 +28,13 @@ export function timeAgo(isoString) {
   if (h < 24) return `${h}h atrás`
   return `${Math.floor(h / 24)}d atrás`
 }
+
+/**
+ * Data de hoje no formato curto do header.
+ * "Terça, 27 out"
+ */
+export function todayLabel(date = new Date()) {
+  const weekday = date.toLocaleDateString('pt-BR', { weekday: 'long' }).replace('-feira', '')
+  const month = date.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')
+  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${date.getDate()} ${month}`
+}

@@ -30,7 +30,7 @@ export default function ShareCard() {
 
   async function handleShare() {
     const shareData = {
-      title: item?.name ?? 'Na Cidade',
+      title: item?.name ?? 'OndeVou',
       text: item?.short_description ?? '',
       url: window.location.href,
     }

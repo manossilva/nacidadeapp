@@ -1,11 +1,11 @@
 {
-  "name": "Aju Guide",
-  "short_name": "Aju Guide",
-  "description": "O que fazer em Aracaju hoje",
+  "name": "OndeVou",
+  "short_name": "OndeVou",
+  "description": "O que rola perto de você hoje",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#ffffff",
+  "background_color": "#ede8df",
   "theme_color": "#0F4C35",
   "lang": "pt-BR",
   "icons": [

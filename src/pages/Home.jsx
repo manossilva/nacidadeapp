@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import PageShell from '../components/layout/PageShell'
 import FeaturedBanner from '../components/cards/FeaturedBanner'
 import { IcPin, IcMap, IcSearch } from '../components/ui/Icons'
@@ -7,20 +7,39 @@ import { useLocation } from '../hooks/useLocation'
 import { useGooglePlaces } from '../hooks/useGooglePlaces'
 import { getPhotoUrl, typeLabel } from '../lib/googlePlaces'
 import { formatDistance } from '../lib/geolocation'
+import { HOME_CATEGORIES, ALL_CATEGORY_TYPES } from '../lib/categories'
 
-// Tipos permitidos — o restante é filtrado fora
-const ALLOWED_TYPES = new Set([
-  'church', 'hindu_temple', 'mosque', 'synagogue',
-  'bar',
-  'cafe', 'bakery',
-  'night_club',
-])
-
-function greeting() {
-  const h = new Date().getHours()
-  if (h < 12) return { text: 'Bom dia', emoji: '☀️' }
-  if (h < 18) return { text: 'Boa tarde', emoji: '🌤️' }
-  return { text: 'Boa noite', emoji: '🌙' }
+function CategoryCircles({ selected, onSelect }) {
+  return (
+    <div className="grid grid-cols-5 gap-2">
+      {HOME_CATEGORIES.map(({ id, label, icon: Icon }) => {
+        const active = selected === id
+        return (
+          <button
+            key={id}
+            onClick={() => onSelect(active ? null : id)}
+            aria-pressed={active}
+            className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+          >
+            <span
+              className={`w-full max-w-[3.5rem] aspect-square rounded-full flex items-center justify-center transition-colors ${
+                active
+                  ? 'bg-ink-800 text-sand-50 dark:bg-sand-100 dark:text-ink-900 shadow-lg'
+                  : 'glass text-ink-700 dark:text-sand-200'
+              }`}
+            >
+              <Icon className="w-6 h-6" />
+            </span>
+            <span className={`text-[11px] font-semibold ${
+              active ? 'text-ink-800 dark:text-sand-100' : 'text-ink-500 dark:text-ink-400'
+            }`}>
+              {label}
+            </span>
+          </button>
+        )
+      })}
+    </div>
+  )
 }
 
 function PlaceListItem({ place, hasEvent }) {
@@ -92,7 +111,8 @@ function PlaceListItem({ place, hasEvent }) {
 
 export default function Home() {
   const [search, setSearch] = useState('')
-  const { text: greetText, emoji: greetEmoji } = greeting()
+  const [category, setCategory] = useState(null)
+  const activeCategory = HOME_CATEGORIES.find(c => c.id === category) ?? null
 
   // Evento em destaque
   const { events: featuredEvents } = useEvents({ featured: true, period: 'week', limit: 1 })
@@ -103,21 +123,24 @@ export default function Home() {
 
   const { position, cityName, radiusKm, loading: geoLoading, requestGPS } = useLocation()
 
-  // Busca todos os locais de uma vez; filtra por tipo client-side
+  // Atualiza sozinho a cidade com base em onde a pessoa está
+  useEffect(() => {
+    const perm = navigator.permissions?.query({ name: 'geolocation' }) ?? Promise.resolve(null)
+    perm.then(s => { if (s?.state !== 'denied') requestGPS() }).catch(() => requestGPS())
+  }, [requestGPS])
+
+  // Sem sessão: busca as 5 juntas; com sessão: só os tipos dela
   const { places: allPlaces, loading: placesLoading } = useGooglePlaces({
     lat: position?.lat,
     lng: position?.lng,
     radiusKm,
-    type: null,
+    type: activeCategory?.types ?? ALL_CATEGORY_TYPES,
   })
 
   const places = useMemo(() => {
-    return allPlaces
-      .filter(p => ALLOWED_TYPES.has(p.primaryType))
-      .filter(p =>
-        !search.trim() ||
-        (p.displayName?.text ?? '').toLowerCase().includes(search.trim().toLowerCase())
-      )
+    const q = search.trim().toLowerCase()
+    if (!q) return allPlaces
+    return allPlaces.filter(p => (p.displayName?.text ?? '').toLowerCase().includes(q))
   }, [allPlaces, search])
 
   // Checa se um local tem evento nesta semana pelo nome
@@ -130,32 +153,44 @@ export default function Home() {
     )
   }
 
-  const loading = geoLoading || placesLoading
+  // Com posição salva, o GPS atualiza em segundo plano sem esconder a lista
+  const loading = placesLoading || (geoLoading && !position)
+
+  // Título sempre em uma linha: a fonte encolhe para nomes de cidade longos
+  const titleChars = (cityName ? `O que rola em ${cityName} hoje?` : 'O que rola por aqui hoje?').length
+  const titleSize = `clamp(1rem, calc((min(100vw, 42rem) - 2rem) / ${(titleChars * 0.56).toFixed(1)}), 1.75rem)`
 
   return (
     <PageShell>
-      {/* Saudação */}
-      <div className="pt-5 pb-3 greeting-anim">
-        <p className="text-xs font-semibold uppercase tracking-widest mb-1 text-ink-400 dark:text-ink-500">
-          {new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' })}
-        </p>
-        <h1 className="text-3xl font-bold leading-tight text-ink-800 dark:text-sand-100">
-          {greetText} {greetEmoji}
+      {/* Título — a cidade vem da localização e troca sozinha */}
+      <div className="pt-5 pb-5 greeting-anim">
+        <h1
+          className="flex items-center gap-[0.25em] whitespace-nowrap font-bold tracking-tight leading-tight text-ink-800 dark:text-sand-100"
+          style={{ fontSize: titleSize }}
+        >
+          <span className="flex-none">{cityName ? 'O que rola em' : 'O que rola'}</span>
+          <span
+            key={cityName ?? 'aqui'}
+            className={`min-w-0 truncate text-rust-500 dark:text-rust-400 ${geoLoading && !cityName ? 'animate-pulse' : 'city-swap'}`}
+          >
+            {cityName ?? 'por aqui'}
+          </span>
+          <span className="flex-none">hoje?</span>
         </h1>
-        <p className="text-sm text-ink-500 dark:text-ink-400 mt-1">
-          {cityName ? `O que rola hoje em ${cityName}?` : 'O que rola hoje na cidade?'}
-        </p>
       </div>
+
+      {/* Sessões — as 5 fixas */}
+      <CategoryCircles selected={category} onSelect={setCategory} />
 
       {/* Destaque — evento em alta da agenda pública */}
       {featuredItem && (
-        <div className="mb-5">
+        <div className="mt-5">
           <FeaturedBanner item={featuredItem} type="event" compact />
         </div>
       )}
 
       {/* Barra de busca fixa */}
-      <div className="relative mb-4">
+      <div className="relative mt-5 mb-4">
         <IcSearch className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-400 dark:text-ink-500 pointer-events-none" />
         <input
           className="input pl-9 pr-4 w-full"
@@ -171,7 +206,7 @@ export default function Home() {
           <IcPin className="w-5 h-5 text-ink-500 dark:text-sand-300 flex-none" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-ink-700 dark:text-sand-200">Ative a localização</p>
-            <p className="text-xs text-ink-400 mt-0.5">Para ver igrejas, bares, cafés e shows perto de você</p>
+            <p className="text-xs text-ink-400 mt-0.5">Para ver igrejas, festas, passeios e bares perto de você</p>
           </div>
           <button onClick={requestGPS} className="text-xs font-bold text-ink-700 dark:text-sand-200 whitespace-nowrap">
             Ativar →
@@ -195,11 +230,16 @@ export default function Home() {
           <div className="py-10 text-center">
             <IcSearch className="w-8 h-8 text-ink-300 dark:text-ink-600 mx-auto mb-2" />
             <p className="text-sm text-ink-500 dark:text-ink-400">
-              {search ? `Nenhum local encontrado para "${search}"` : 'Nenhum local encontrado nesse raio.'}
+              {search
+                ? `Nenhum local encontrado para "${search}"`
+                : `Nenhum local${activeCategory ? ` de ${activeCategory.label.toLowerCase()}` : ''} nesse raio.`}
             </p>
           </div>
         ) : (
           <div className="space-y-3">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-400 dark:text-ink-500">
+              {activeCategory ? activeCategory.label : 'Perto de você'} · {places.length}
+            </p>
             {places.map(p => (
               <PlaceListItem
                 key={p.id}

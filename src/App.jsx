@@ -18,10 +18,12 @@ import AdminEvents from './pages/admin/Events'
 import AdminAdvertisers from './pages/admin/Advertisers'
 import AdminLogin from './pages/admin/Login'
 import { AdminGuard } from './components/admin/AdminGuard'
+import Splash from './components/ui/Splash'
 
 export default function App() {
   return (
     <BrowserRouter>
+      <Splash />
       <Routes>
         {/* Público */}
         <Route path="/" element={<Home />} />

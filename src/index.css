@@ -239,3 +239,146 @@
 .greeting-anim {
   animation: greetIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+
+/* ── Troca da cidade no título ── */
+@keyframes citySwap {
+  from { opacity: 0; transform: translateY(0.35em); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.city-swap {
+  animation: citySwap 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ── Splash OndeVou ──
+   0.0s "Onde" sobe letra a letra · 0.3s "Vou" · 0.65s "?" pergunta
+   0.95s o pin cai no "?" · 1.35s as palavras se juntam e o chão "pinga"
+   1.65s tagline · 2.3s sai (Splash.jsx controla a saída) */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.1rem;
+  background-color: #ede8df;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(226,213,190,0.7) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 110%, rgba(193,217,188,0.35) 0%, transparent 55%);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.dark .splash {
+  background-color: #0f1a0c;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 20% -10%, rgba(18,36,12,0.9) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 110%, rgba(10,28,16,0.7) 0%, transparent 55%);
+}
+.black .splash { background: #000; }
+.splash.is-leaving {
+  opacity: 0;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+
+.splash-word {
+  display: flex;
+  align-items: flex-start;
+  font-size: clamp(2.75rem, 13vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.splash-letter {
+  display: inline-block;
+  animation: splashLetter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.splash-vou {
+  animation: splashGap 0.35s cubic-bezier(0.22, 1, 0.36, 1) 1.35s both;
+}
+
+.splash-mark {
+  position: relative;
+  display: inline-block;
+  width: 0.55em;
+  height: 1em;
+  margin-left: 0.04em;
+}
+.splash-question {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  animation:
+    splashQIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) 0.65s both,
+    splashQOut 0.16s ease-in 1.3s forwards;
+}
+.splash-pin {
+  position: absolute;
+  left: 0;
+  top: -0.1em;
+  width: 0.55em;
+  height: 0.55em;
+  transform-origin: 50% 100%;
+  animation: splashPin 0.65s cubic-bezier(0.5, 0, 0.75, 0) 0.95s both;
+}
+.splash-pin svg { display: block; }
+.splash-ping {
+  position: absolute;
+  left: 50%;
+  top: 0.42em;
+  width: 0.6em;
+  height: 0.2em;
+  margin: -0.1em 0 0 -0.3em;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  opacity: 0;
+  animation: splashPing 0.9s ease-out 1.35s both;
+}
+.splash-ping-2 { animation-delay: 1.6s; }
+
+.splash-tagline {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  animation: splashTagline 0.45s ease-out 1.65s both;
+}
+
+@keyframes splashLetter {
+  from { opacity: 0; transform: translateY(0.45em) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes splashGap {
+  from { margin-left: 0.22em; }
+  to   { margin-left: 0; }
+}
+@keyframes splashQIn {
+  from { opacity: 0; transform: scale(0) rotate(-20deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes splashQOut {
+  to { opacity: 0; transform: scale(0.2) translateY(0.25em); }
+}
+@keyframes splashPin {
+  0%   { opacity: 0; transform: translateY(-70vh) scale(1.35); }
+  8%   { opacity: 1; }
+  55%  { transform: translateY(0.35em) scale(1.45, 1.1); animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+  72%  { transform: translateY(-0.18em) scale(0.95, 1.12); }
+  86%  { transform: translateY(0.03em) scale(1.06, 0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes splashPing {
+  0%   { opacity: 0; transform: scale(0.2); }
+  15%  { opacity: 0.8; }
+  100% { opacity: 0; transform: scale(3.2); }
+}
+@keyframes splashTagline {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash, .splash * { animation: none !important; }
+  .splash.is-leaving { transform: none; }
+}

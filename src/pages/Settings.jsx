@@ -110,7 +110,7 @@ export default function Settings() {
       {/* Sobre */}
       <section className="glass rounded-2xl px-4 mb-8">
         <p className="text-[11px] font-semibold uppercase tracking-widest text-ink-400 pt-3 pb-2">Sobre</p>
-        <Row icon={<IcInfo className="w-4 h-4" />} label="Na Cidade App">
+        <Row icon={<IcInfo className="w-4 h-4" />} label="OndeVou">
           <span className="text-sm text-ink-400">v0.2.0</span>
         </Row>
       </section>

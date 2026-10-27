@@ -36,7 +36,7 @@ export async function searchNearby({ lat, lng, radiusMeters = 5000, type = null,
     languageCode: 'pt-BR',
   }
 
-  if (type) body.includedTypes = [type]
+  if (type) body.includedTypes = Array.isArray(type) ? type : [type]
 
   const res = await fetch(`${BASE}/places:searchNearby`, {
     method: 'POST',
@@ -74,6 +74,12 @@ export function typeLabel(type) {
     gym: 'Academia', beauty_salon: 'Salão', night_club: 'Balada',
     shopping_mall: 'Shopping', store: 'Loja', gas_station: 'Posto',
     hospital: 'Hospital', bank: 'Banco', church: 'Igreja',
+    hindu_temple: 'Templo', mosque: 'Mesquita', synagogue: 'Sinagoga',
+    event_venue: 'Espaço de eventos', banquet_hall: 'Salão de festas',
+    historical_landmark: 'Ponto histórico', cultural_center: 'Centro cultural',
+    art_gallery: 'Galeria', aquarium: 'Aquário', visitor_center: 'Centro de visitantes',
+    movie_theater: 'Cinema', amusement_center: 'Diversão', amusement_park: 'Parque de diversões',
+    bowling_alley: 'Boliche', zoo: 'Zoológico',
   }
   return map[type] ?? type?.replace(/_/g, ' ') ?? 'Local'
 }

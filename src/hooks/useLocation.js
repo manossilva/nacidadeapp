@@ -1,8 +1,10 @@
-import { useState, useEffect, useCallback } from 'react'
-import { getCurrentPosition } from '../lib/geolocation'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import { getCurrentPosition, haversineDistance } from '../lib/geolocation'
 import { reverseGeocode } from '../lib/geocoding'
 
 const KEY = 'aju_loc_v1'
+// Abaixo disso mantém a posição salva — evita refazer buscas por ruído do GPS
+const MOVE_THRESHOLD_KM = 0.2
 
 function loadSaved() {
   try { return JSON.parse(localStorage.getItem(KEY)) ?? {} } catch { return {} }
@@ -20,6 +22,8 @@ export function useLocation() {
   const [radiusKm, setRadiusKm] = useState(saved.radiusKm ?? 5)
   const [loading, setLoading]   = useState(false)
   const [error, setError]       = useState(null)
+  const latest = useRef({ position, cityName })
+  latest.current = { position, cityName }
 
   useEffect(() => {
     try {
@@ -32,10 +36,15 @@ export function useLocation() {
     setError(null)
     try {
       const pos = await getCurrentPosition()
-      setPosition(pos)
-      const name = await reverseGeocode(pos.lat, pos.lng).catch(() => null)
-      if (name) setCityName(name)
-      return pos
+      const prev = latest.current
+      const moved = !prev.position ||
+        haversineDistance(prev.position.lat, prev.position.lng, pos.lat, pos.lng) > MOVE_THRESHOLD_KM
+      if (moved) setPosition(pos)
+      if (moved || !prev.cityName) {
+        const name = await reverseGeocode(pos.lat, pos.lng).catch(() => null)
+        if (name) setCityName(name)
+      }
+      return moved ? pos : prev.position
     } catch (err) {
       setError(err.message || 'Não foi possível obter sua localização.')
       return null

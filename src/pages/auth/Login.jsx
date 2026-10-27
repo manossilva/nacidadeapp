@@ -39,7 +39,7 @@ export default function Login() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl glass mb-4">
             <span className="text-2xl">🌊</span>
           </div>
-          <h1 className="text-2xl font-bold text-ink-800">Aju Guide</h1>
+          <h1 className="text-2xl font-bold text-ink-800">OndeVou</h1>
           <p className="text-sm text-ink-400 mt-1">Bem-vindo de volta</p>
         </div>
 
