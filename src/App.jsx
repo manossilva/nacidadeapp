@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import Home from './pages/Home'
+import Sessao from './pages/Sessao'
 import Lugares from './pages/Lugares'
 import Eventos from './pages/Eventos'
 import Feed from './pages/Feed'
@@ -27,6 +28,7 @@ export default function App() {
       <Routes>
         {/* Público */}
         <Route path="/" element={<Home />} />
+        <Route path="/sessao/:id" element={<Sessao />} />
         <Route path="/lugares" element={<Lugares />} />
         <Route path="/lugares/:categoria" element={<Lugares />} />
         <Route path="/eventos" element={<Eventos />} />

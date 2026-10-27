@@ -38,3 +38,21 @@ export function todayLabel(date = new Date()) {
   const month = date.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')
   return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${date.getDate()} ${month}`
 }
+
+/**
+ * Quando um evento acontece, para banners.
+ * "Hoje · 22h" / "Amanhã · 19h30" / "Sex, 31 out · 22h"
+ */
+export function eventWhen(isoString) {
+  const d = new Date(isoString)
+  const now = new Date()
+  const dayDiff = Math.round(
+    (new Date(d.getFullYear(), d.getMonth(), d.getDate()) - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86_400_000
+  )
+  const hour = `${d.getHours()}h${d.getMinutes() ? String(d.getMinutes()).padStart(2, '0') : ''}`
+  if (dayDiff === 0) return `Hoje · ${hour}`
+  if (dayDiff === 1) return `Amanhã · ${hour}`
+  const weekday = d.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')
+  const month = d.toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')
+  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${d.getDate()} ${month} · ${hour}`
+}

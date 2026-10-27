@@ -4,50 +4,13 @@ import { timeFromNow } from '../../lib/time'
 export default function FeaturedBanner({ item, type = 'event', compact = false }) {
   if (!item) return null
   const to = type === 'event' ? `/evento/${item.slug}` : `/local/${item.slug}`
-
-  // Faixa baixa — cabe na primeira dobra da Home junto com as sessões
-  if (compact) {
-    return (
-      <Link
-        to={to}
-        className="relative flex items-center h-20 rounded-2xl overflow-hidden active:scale-[0.98] transition-transform"
-        style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.10)' }}
-      >
-        {item.cover_image_url ? (
-          <img src={item.cover_image_url} alt={item.name} className="absolute inset-0 w-full h-full object-cover" />
-        ) : (
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(135deg, #2e4226, #52703d)' }} />
-        )}
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to right, rgba(15,22,10,0.88) 0%, rgba(15,22,10,0.6) 60%, rgba(15,22,10,0.25) 100%)' }}
-        />
-
-        <div className="relative flex-1 min-w-0 pl-4 pr-2">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-rust-300">
-            Destaque{item.starts_at && ` · ${timeFromNow(item.starts_at)}`}
-          </p>
-          <h2 className="font-bold text-base leading-tight text-white line-clamp-1 mt-1">{item.name}</h2>
-          {item.short_description && (
-            <p className="text-xs line-clamp-1 mt-0.5" style={{ color: 'rgba(245,240,232,0.75)' }}>{item.short_description}</p>
-          )}
-        </div>
-
-        <span
-          className="relative mr-3 w-8 h-8 flex-none rounded-full flex items-center justify-center text-sm text-white"
-          style={{ background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.25)', backdropFilter: 'blur(6px)' }}
-        >
-          →
-        </span>
-      </Link>
-    )
-  }
+  const ratio = compact ? '21/9' : '16/9'
 
   return (
     <Link
       to={to}
       className="relative block rounded-2xl overflow-hidden active:scale-[0.98] transition-transform"
-      style={{ aspectRatio: '16/9', boxShadow: '0 6px 28px rgba(0,0,0,0.12)' }}
+      style={{ aspectRatio: ratio, boxShadow: '0 6px 28px rgba(0,0,0,0.12)' }}
     >
       {item.cover_image_url ? (
         <img src={item.cover_image_url} alt={item.name} className="w-full h-full object-cover" />

@@ -382,3 +382,43 @@
   .splash, .splash * { animation: none !important; }
   .splash.is-leaving { transform: none; }
 }
+
+/* ── Espaço da barra inferior em telas que ocupam a tela toda ── */
+.pb-nav {
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom));
+}
+
+/* ── Banners da Home: o texto se adapta à altura que sobrar ── */
+.banner {
+  container-type: size;
+}
+.banner-title {
+  font-size: 1.25rem;
+}
+@container (max-height: 9.5rem) {
+  .banner-sub { display: none; }
+  .banner-title { font-size: 1.05rem; -webkit-line-clamp: 1; }
+}
+@container (min-height: 15rem) {
+  .banner-title { font-size: 1.5rem; }
+}
+@keyframes kenburns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.08); }
+}
+.banner-kenburns {
+  animation: kenburns 9s ease-out both;
+}
+
+/* ── Tela interna entrando como uma nova tela ── */
+@keyframes screenIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.screen-enter {
+  animation: screenIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-kenburns, .screen-enter { animation: none; }
+}

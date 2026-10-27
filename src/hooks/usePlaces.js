@@ -52,7 +52,7 @@ export function useEvents({ category, period, featured, limit = 20, enabled = tr
 
       let query = supabase
         .from('events')
-        .select('id, name, slug, category, short_description, cover_image_url, starts_at, ends_at, price_info, custom_location, latitude, longitude, plan_tier, is_featured, ticket_url')
+        .select('id, name, slug, category, short_description, cover_image_url, starts_at, ends_at, price_info, custom_location, latitude, longitude, plan_tier, is_featured, ticket_url, organizer_name')
         .eq('is_published', true)
         .gte('starts_at', todayStart)
         .order('is_featured', { ascending: false })

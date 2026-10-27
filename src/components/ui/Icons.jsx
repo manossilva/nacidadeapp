@@ -151,20 +151,45 @@ export const IcChurch = ({ className = 'w-5 h-5' }) => (
   </svg>
 )
 
-export const IcConfetti = ({ className = 'w-5 h-5' }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 19.5l4-11 7 7-11 4zM13 3.5c.6 1.6.1 3-1.2 3.8M20.5 11c-1.6-.6-3-.1-3.8 1.2M17 4h.01M20 7h.01M20.5 3.5h.01" />
-  </svg>
-)
-
-export const IcUmbrella = ({ className = 'w-5 h-5' }) => (
-  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1M3 12.5a9 9 0 0118 0H3zM12 12.5V19a2 2 0 01-4 0" />
-  </svg>
-)
-
 export const IcBeer = ({ className = 'w-5 h-5' }) => (
   <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
     <path strokeLinecap="round" strokeLinejoin="round" d="M5 9h10v10a2 2 0 01-2 2H7a2 2 0 01-2-2V9zM15 11.5h2a2 2 0 012 2v1.5a2 2 0 01-2 2h-2M5 9a2.5 2.5 0 012.6-3.4 3 3 0 014.9-.6A2.5 2.5 0 0115 9M8.5 13v4.5M11.5 13v4.5" />
+  </svg>
+)
+
+export const IcUtensils = ({ className = 'w-5 h-5' }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 3v7a2 2 0 002 2v9M10 3v7a2 2 0 01-2 2M8 3v5M17 21V3c-2 1.5-3 4-3 7v3h3" />
+  </svg>
+)
+
+export const IcMasks = ({ className = 'w-5 h-5' }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 4h11v6.5a5.5 5.5 0 01-11 0V4zM6 8.5h.01M11 8.5h.01M6.5 12.5a3 3 0 004 0" />
+    <path strokeLinecap="round" strokeLinejoin="round" d="M14 9h7v6.5a5.5 5.5 0 01-9.6 3.7M16.5 13h.01M19 13h.01M16 17.5a3 3 0 013.5 0" />
+  </svg>
+)
+
+export const IcLeaf = ({ className = 'w-5 h-5' }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M5 19C5 10.5 10 5 19.5 4.5 20 14 14.5 19 6 19H5zM5 19l8-8" />
+  </svg>
+)
+
+export const IcLandmark = ({ className = 'w-5 h-5' }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M3 9.5L12 4l9 5.5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 21h18" />
+  </svg>
+)
+
+export const IcSparkle = ({ className = 'w-5 h-5' }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M12 3l1.9 5.6L19.5 10.5l-5.6 1.9L12 18l-1.9-5.6-5.6-1.9 5.6-1.9L12 3zM19 16v4M17 18h4" />
+  </svg>
+)
+
+export const IcChevronLeft = ({ className = 'w-5 h-5' }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
   </svg>
 )
