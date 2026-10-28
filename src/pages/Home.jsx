@@ -18,7 +18,7 @@ function SessionGrid() {
           key={id}
           to={`/sessao/${id}`}
           state={{ fromHome: true }}
-          className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+          className="bubble-link flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
         >
           <span className="w-[clamp(3.25rem,8.5dvh,4.75rem)] aspect-square rounded-full bubble flex items-center justify-center">
             <Icon className="w-[42%] h-[42%]" />

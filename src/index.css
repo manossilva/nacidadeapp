@@ -146,9 +146,11 @@
     background: #ffe000;
     color: #0a0a09;
     box-shadow: 0 6px 18px rgba(242,207,0,0.35);
+    transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
   }
   .bubble svg { stroke-width: 2.2; }
-  /* Sessão aberta na tela interna: invertida (preta com ícone amarelo) */
+  /* Ativada: invertida (preta com ícone amarelo) — ao tocar na Home e a sessão aberta na tela interna */
+  .bubble-link:active .bubble,
   .bubble-current {
     background: #0a0a09;
     color: #ffe000;
