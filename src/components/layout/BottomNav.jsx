@@ -22,14 +22,12 @@ export default function BottomNav() {
               key={to}
               to={to}
               aria-current={active ? 'page' : undefined}
-              className={`flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-semibold transition-colors ${
-                active ? 'text-ink-800 dark:text-sand-100' : 'text-ink-400 dark:text-ink-500'
+              className={`nav-item flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-semibold transition-colors ${
+                active ? 'is-active' : ''
               }`}
             >
-              {/* Ícones são só contorno: o ativo ganha traço mais forte e uma pílula de fundo */}
-              <span className={`h-7 w-12 rounded-full flex items-center justify-center transition-colors ${
-                active ? 'bg-ink-800/10 dark:bg-sand-100/15' : ''
-              }`}>
+              {/* Ícones são só contorno: o ativo ganha traço mais forte e uma pílula amarela */}
+              <span className="nav-pill h-7 w-12 rounded-full flex items-center justify-center transition-colors">
                 <Icon strokeWidth={active ? 2.2 : 1.8} />
               </span>
               <span>{label}</span>

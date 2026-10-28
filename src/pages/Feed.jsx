@@ -10,7 +10,7 @@ function Avatar({ initials, size = 'md' }) {
   return (
     <div
       className={`${sz} rounded-full flex items-center justify-center font-bold flex-shrink-0`}
-      style={{ background: '#2e4226', color: '#f5f0e8' }}
+      style={{ background: '#33312e', color: '#f5f0e8' }}
     >
       {initials}
     </div>
@@ -33,15 +33,15 @@ function CommentInput({ onSubmit }) {
         placeholder="Escreve aí..."
         className="flex-1 rounded-xl px-3 py-2 text-sm focus:outline-none"
         style={{
-          background: 'rgba(237,232,223,0.7)',
+          background: 'rgba(247,242,232,0.7)',
           border: '1px solid rgba(255,255,255,0.5)',
-          color: '#1f2e1a',
+          color: '#1f1e1c',
         }}
       />
       <button
         type="submit"
         className="px-3 py-2 rounded-xl text-sm font-semibold transition-all active:scale-95"
-        style={{ background: '#2e4226', color: '#f5f0e8' }}
+        style={{ background: '#33312e', color: '#f5f0e8' }}
       >
         Enviar
       </button>
@@ -76,14 +76,14 @@ function FeedCard({ post, onColar, onComment }) {
       <div className="flex items-center gap-3 p-4 pb-3">
         <Avatar initials={post.user.avatar} />
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold leading-tight" style={{ color: '#1f2e1a' }}>
+          <p className="text-sm font-semibold leading-tight" style={{ color: '#1f1e1c' }}>
             {post.user.name}
-            <span className="font-normal" style={{ color: '#728c68' }}> colou em </span>
-            <Link to={to} className="font-semibold underline decoration-dotted" style={{ color: '#2e4226' }}>
+            <span className="font-normal" style={{ color: '#858179' }}> colou em </span>
+            <Link to={to} className="font-semibold underline decoration-dotted" style={{ color: '#33312e' }}>
               {item.name}
             </Link>
           </p>
-          <p className="text-xs mt-0.5" style={{ color: '#9aad92' }}>{timeAgo(post.createdAt)}</p>
+          <p className="text-xs mt-0.5" style={{ color: '#aeaaa1' }}>{timeAgo(post.createdAt)}</p>
         </div>
       </div>
 
@@ -98,7 +98,7 @@ function FeedCard({ post, onColar, onComment }) {
             />
             <div
               className="absolute inset-0"
-              style={{ background: 'linear-gradient(to top, rgba(15,22,10,0.4) 0%, transparent 60%)' }}
+              style={{ background: 'linear-gradient(to top, rgba(14,14,13,0.4) 0%, transparent 60%)' }}
             />
           </div>
         </Link>
@@ -106,7 +106,7 @@ function FeedCard({ post, onColar, onComment }) {
 
       {/* Mensagem do usuário */}
       {post.message && (
-        <p className="px-4 pt-3 text-sm" style={{ color: '#2e4226' }}>
+        <p className="px-4 pt-3 text-sm" style={{ color: '#33312e' }}>
           {post.message}
         </p>
       )}
@@ -118,8 +118,8 @@ function FeedCard({ post, onColar, onComment }) {
           onClick={() => onColar(post.id)}
           className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold transition-all active:scale-95"
           style={{
-            background: colado ? '#2e4226' : 'rgba(46,66,38,0.08)',
-            color: colado ? '#f5f0e8' : '#2e4226',
+            background: colado ? '#33312e' : 'rgba(51,49,46,0.08)',
+            color: colado ? '#f5f0e8' : '#33312e',
           }}
         >
           <svg className="w-3.5 h-3.5" fill={colado ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -130,7 +130,7 @@ function FeedCard({ post, onColar, onComment }) {
           {post.colados > 0 && (
             <span
               className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px]"
-              style={{ background: colado ? 'rgba(255,255,255,0.2)' : 'rgba(46,66,38,0.12)' }}
+              style={{ background: colado ? 'rgba(255,255,255,0.2)' : 'rgba(51,49,46,0.12)' }}
             >
               {post.colados}
             </span>
@@ -141,7 +141,7 @@ function FeedCard({ post, onColar, onComment }) {
         <button
           onClick={() => setShowComments(v => !v)}
           className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all active:scale-95"
-          style={{ background: 'rgba(46,66,38,0.08)', color: '#2e4226' }}
+          style={{ background: 'rgba(51,49,46,0.08)', color: '#33312e' }}
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
@@ -153,7 +153,7 @@ function FeedCard({ post, onColar, onComment }) {
         <button
           onClick={handleShare}
           className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium transition-all active:scale-95 ml-auto"
-          style={{ background: 'rgba(46,66,38,0.08)', color: '#2e4226' }}
+          style={{ background: 'rgba(51,49,46,0.08)', color: '#33312e' }}
         >
           <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
@@ -172,7 +172,7 @@ function FeedCard({ post, onColar, onComment }) {
                   <Avatar initials={c.user.slice(0, 2).toUpperCase()} size="sm" />
                   <div
                     className="flex-1 rounded-xl px-3 py-2 text-xs"
-                    style={{ background: 'rgba(237,232,223,0.6)', color: '#1f2e1a' }}
+                    style={{ background: 'rgba(247,242,232,0.6)', color: '#1f1e1c' }}
                   >
                     <span className="font-semibold">{c.user} </span>
                     {c.text}
@@ -239,13 +239,13 @@ export default function Feed() {
       <div className="pt-5 pb-2">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold" style={{ color: '#1f2e1a' }}>Feed</h1>
-            <p className="text-sm mt-0.5" style={{ color: '#728c68' }}>Quem saiu hoje em Aju</p>
+            <h1 className="text-2xl font-bold" style={{ color: '#1f1e1c' }}>Feed</h1>
+            <p className="text-sm mt-0.5" style={{ color: '#858179' }}>Quem saiu hoje em Aju</p>
           </div>
           <button
             onClick={() => setCheckin({ item: null, msg: '' })}
             className="flex items-center gap-1.5 px-4 py-2.5 rounded-2xl text-sm font-semibold active:scale-95 transition-all"
-            style={{ background: '#2e4226', color: '#f5f0e8', boxShadow: '0 2px 12px rgba(30,46,26,0.25)' }}
+            style={{ background: '#33312e', color: '#f5f0e8', boxShadow: '0 2px 12px rgba(31,30,28,0.25)' }}
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
@@ -265,15 +265,15 @@ export default function Feed() {
       {checkin !== null && (
         <div
           className="fixed inset-0 z-50 flex items-end justify-center"
-          style={{ background: 'rgba(15,22,10,0.5)', backdropFilter: 'blur(4px)' }}
+          style={{ background: 'rgba(14,14,13,0.5)', backdropFilter: 'blur(4px)' }}
           onClick={e => { if (e.target === e.currentTarget) setCheckin(null) }}
         >
           <div
             className="w-full max-w-lg rounded-t-3xl p-6 pb-10"
             style={{ background: 'rgba(240,235,226,0.95)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.6)' }}
           >
-            <div className="w-10 h-1 rounded-full mx-auto mb-5" style={{ background: 'rgba(46,66,38,0.2)' }} />
-            <h2 className="font-bold text-lg mb-4" style={{ color: '#1f2e1a' }}>Onde você tá colado?</h2>
+            <div className="w-10 h-1 rounded-full mx-auto mb-5" style={{ background: 'rgba(51,49,46,0.2)' }} />
+            <h2 className="font-bold text-lg mb-4" style={{ color: '#1f1e1c' }}>Onde você tá colado?</h2>
 
             <div className="space-y-2 max-h-40 overflow-y-auto mb-4">
               {allItems.map(item => (
@@ -282,9 +282,9 @@ export default function Feed() {
                   onClick={() => setCheckin(c => ({ ...c, item }))}
                   className="w-full flex items-center gap-3 p-3 rounded-2xl text-left transition-all active:scale-[0.98]"
                   style={{
-                    background: checkin.item?.id === item.id ? '#2e4226' : 'rgba(255,252,247,0.6)',
+                    background: checkin.item?.id === item.id ? '#33312e' : 'rgba(255,252,247,0.6)',
                     border: '1px solid rgba(255,255,255,0.6)',
-                    color: checkin.item?.id === item.id ? '#f5f0e8' : '#1f2e1a',
+                    color: checkin.item?.id === item.id ? '#f5f0e8' : '#1f1e1c',
                   }}
                 >
                   {item.cover_image_url && (

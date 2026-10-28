@@ -135,7 +135,7 @@ export default function Roteiros() {
             {r.cover && (
               <div className="relative" style={{ aspectRatio: '16/7' }}>
                 <img src={r.cover} alt={r.title} className="w-full h-full object-cover" />
-                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(15,22,10,0.6) 0%, transparent 60%)' }} />
+                <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(14,14,13,0.6) 0%, transparent 60%)' }} />
                 <div className="absolute bottom-3 left-4 right-4">
                   <h3 className="font-bold text-base text-white">{r.title}</h3>
                 </div>
@@ -143,7 +143,7 @@ export default function Roteiros() {
             )}
             <div className="p-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <IcRoute className="w-4 h-4 text-ink-500" />
+                <IcRoute className="w-4 h-4 ic" />
                 <span className="text-xs text-ink-500 dark:text-ink-400">{r.stops.length} paradas · {r.duration}</span>
               </div>
               <div className="flex gap-1.5 flex-wrap justify-end">

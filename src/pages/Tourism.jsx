@@ -54,9 +54,9 @@ export default function Tourism() {
       {/* Hero */}
       <div
         className="-mx-4 px-6 pt-8 pb-6 mb-6"
-        style={{ background: 'linear-gradient(160deg, #1a3a2a 0%, #2e4226 50%, #1a2e1a 100%)' }}
+        style={{ background: 'linear-gradient(160deg, #2a2925 0%, #33312e 50%, #1f1e1c 100%)' }}
       >
-        <p className="text-xs font-semibold uppercase tracking-widest text-sand-400 mb-2">Guia de turismo</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-brand-400 mb-2">Guia de turismo</p>
         <h1 className="text-2xl font-bold text-sand-50 leading-tight">
           {cityName ? `O melhor de ${cityName}` : 'Explore a cidade'}
         </h1>
@@ -85,7 +85,7 @@ export default function Tourism() {
         <div className="glass rounded-2xl p-5 mb-6">
           <div className="flex items-start gap-3">
             <div className="w-10 h-10 rounded-xl bg-ink-800/10 dark:bg-white/10 flex items-center justify-center flex-none">
-              <IcPin className="w-5 h-5 text-ink-600 dark:text-sand-300" />
+              <IcPin className="w-5 h-5 ic" />
             </div>
             <div className="flex-1">
               <p className="font-semibold text-sm text-ink-800 dark:text-sand-100 mb-0.5">Sem localização definida</p>
@@ -195,7 +195,7 @@ export default function Tourism() {
           className="flex items-center gap-3 glass rounded-2xl p-4 active:scale-[0.98] transition-transform"
         >
           <div className="w-10 h-10 rounded-xl bg-ink-800/10 dark:bg-white/10 flex items-center justify-center flex-none">
-            <IcRoute className="w-5 h-5 text-ink-700 dark:text-sand-200" />
+            <IcRoute className="w-5 h-5 ic" />
           </div>
           <div className="flex-1">
             <p className="font-semibold text-sm text-ink-800 dark:text-sand-100">Roteiros de turismo</p>

@@ -18,8 +18,8 @@ export default function Lugares() {
   return (
     <PageShell>
       <div className="pt-5 pb-4">
-        <h1 className="text-2xl font-bold" style={{ color: '#1f2e1a' }}>Lugares</h1>
-        <p className="text-sm mt-0.5" style={{ color: '#728c68' }}>
+        <h1 className="text-2xl font-bold" style={{ color: '#1f1e1c' }}>Lugares</h1>
+        <p className="text-sm mt-0.5" style={{ color: '#858179' }}>
           {places.length > 0 ? `${places.length} lugar${places.length !== 1 ? 'es' : ''} em Aracaju` : 'Explorando a cidade...'}
         </p>
       </div>

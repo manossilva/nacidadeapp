@@ -15,13 +15,13 @@ export default function FeaturedBanner({ item, type = 'event', compact = false }
       {item.cover_image_url ? (
         <img src={item.cover_image_url} alt={item.name} className="w-full h-full object-cover" />
       ) : (
-        <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, #2e4226, #52703d)' }} />
+        <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, #33312e, #64615a)' }} />
       )}
 
       {/* Gradiente suave */}
       <div
         className="absolute inset-0"
-        style={{ background: 'linear-gradient(to top, rgba(15,22,10,0.75) 0%, rgba(15,22,10,0.1) 55%, transparent 100%)' }}
+        style={{ background: 'linear-gradient(to top, rgba(14,14,13,0.75) 0%, rgba(14,14,13,0.1) 55%, transparent 100%)' }}
       />
 
       {/* Conteúdo */}

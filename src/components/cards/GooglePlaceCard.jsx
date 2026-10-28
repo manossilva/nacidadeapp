@@ -79,7 +79,7 @@ export default function GooglePlaceCard({ place }) {
         {price && (
           <span
             className="absolute bottom-2 right-2 text-[10px] font-bold px-2 py-0.5 rounded-full"
-            style={{ background: 'rgba(255,252,247,0.8)', color: '#3d5733', backdropFilter: 'blur(4px)' }}
+            style={{ background: 'rgba(255,252,247,0.8)', color: '#4a4843', backdropFilter: 'blur(4px)' }}
           >
             {price}
           </span>

@@ -71,13 +71,13 @@ export default function ShareCard() {
       <div
         ref={cardRef}
         className="w-full max-w-sm rounded-3xl overflow-hidden shadow-2xl"
-        style={{ background: 'linear-gradient(145deg, #1f2e1a 0%, #2e4226 60%, #3d5733 100%)' }}
+        style={{ background: 'linear-gradient(145deg, #1f1e1c 0%, #33312e 60%, #4a4843 100%)' }}
       >
         {/* Imagem de capa */}
         {item.cover_image_url ? (
           <div className="relative" style={{ aspectRatio: '4/3' }}>
             <img src={item.cover_image_url} alt={item.name} className="w-full h-full object-cover opacity-70" />
-            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 30%, rgba(15,22,10,0.85) 100%)' }} />
+            <div className="absolute inset-0" style={{ background: 'linear-gradient(to bottom, transparent 30%, rgba(14,14,13,0.85) 100%)' }} />
           </div>
         ) : (
           <div className="flex items-center justify-center" style={{ aspectRatio: '4/3', background: 'rgba(255,255,255,0.05)' }}>

@@ -1,28 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { IcSparkle, IcLandmark } from '../ui/Icons'
 
 // Banner dinâmico: troca sozinho, aceita arrastar para o lado e se ajusta à
 // altura que sobrar na Home (o texto se adapta via container query no CSS)
+const OVERLAY = 'linear-gradient(to top, rgba(14,14,13,0.92) 0%, rgba(14,14,13,0.45) 55%, rgba(14,14,13,0.12) 100%)'
+
 const VARIANTS = {
-  private: {
-    overlay: 'linear-gradient(to top, rgba(28,12,6,0.92) 0%, rgba(28,12,6,0.45) 55%, rgba(28,12,6,0.1) 100%)',
-    fallback: 'linear-gradient(135deg, #9e2f0e, #e35220)',
-    tagClass: 'bg-rust-500 text-white',
-    TagIcon: IcSparkle,
-  },
-  prefeitura: {
-    overlay: 'linear-gradient(to top, rgba(9,22,14,0.92) 0%, rgba(9,22,14,0.45) 55%, rgba(9,22,14,0.1) 100%)',
-    fallback: 'linear-gradient(135deg, #1f2e1a, #527044)',
-    tagClass: 'bg-white/90 text-ink-800',
-    TagIcon: IcLandmark,
-  },
+  privado: { label: 'Evento privado',   fallback: 'linear-gradient(135deg, #4a3f00, #c9aa00)' },
+  publico: { label: 'Eventos públicos', fallback: 'linear-gradient(135deg, #1f1e1c, #64615a)' },
 }
 
 function Slide({ item, variant, active }) {
   const [imgErr, setImgErr] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
-  const { overlay, fallback, tagClass, TagIcon } = VARIANTS[variant]
+  const { label, fallback } = VARIANTS[variant]
 
   return (
     <>
@@ -39,11 +30,12 @@ function Slide({ item, variant, active }) {
           onError={() => setImgErr(true)}
         />
       )}
-      <div className="absolute inset-0" style={{ background: overlay }} />
+      <div className="absolute inset-0" style={{ background: OVERLAY }} />
 
-      <span className={`absolute top-3 left-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider ${tagClass}`}>
-        <TagIcon className="w-3 h-3" />
-        {item.tag}
+      {/* Etiqueta mínima: ponto amarelo + tipo do evento */}
+      <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/35 backdrop-blur-sm px-2.5 py-1 text-[11px] font-medium text-white">
+        <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
+        {label}
       </span>
 
       <div className="absolute inset-x-0 bottom-0 p-4 pr-14">
@@ -56,17 +48,14 @@ function Slide({ item, variant, active }) {
         )}
       </div>
 
-      <span
-        className="absolute bottom-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm text-white"
-        style={{ background: 'rgba(255,255,255,0.16)', border: '1px solid rgba(255,255,255,0.28)', backdropFilter: 'blur(6px)' }}
-      >
+      <span className="absolute bottom-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-brand-400 text-ink-900">
         →
       </span>
     </>
   )
 }
 
-export default function BannerCarousel({ items, variant = 'private', interval = 5000, label, className = '' }) {
+export default function BannerCarousel({ items, variant = 'privado', interval = 5000, className = '' }) {
   const [index, setIndex] = useState(0)
   const touchX = useRef(null)
   const swiped = useRef(false)
@@ -99,7 +88,7 @@ export default function BannerCarousel({ items, variant = 'private', interval = 
   return (
     <section
       aria-roledescription="carrossel"
-      aria-label={label}
+      aria-label={VARIANTS[variant].label}
       className={`banner relative rounded-3xl overflow-hidden ${className}`}
       style={{ boxShadow: '0 6px 24px rgba(0,0,0,0.12)' }}
       onTouchStart={onTouchStart}
@@ -125,7 +114,7 @@ export default function BannerCarousel({ items, variant = 'private', interval = 
               key={item.id}
               onClick={() => setIndex(i)}
               aria-label={`Mostrar banner ${i + 1} de ${count}`}
-              className={`h-1.5 rounded-full transition-all ${i === current ? 'w-5 bg-white' : 'w-1.5 bg-white/50'}`}
+              className={`h-1.5 rounded-full transition-all ${i === current ? 'w-5 bg-brand-400' : 'w-1.5 bg-white/50'}`}
             />
           ))}
         </div>

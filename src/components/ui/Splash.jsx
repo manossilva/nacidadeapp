@@ -36,13 +36,13 @@ export default function Splash() {
   return (
     <div className={`splash ${leaving ? 'is-leaving' : ''}`} aria-hidden="true">
       <div className="splash-word">
-        <span className="text-ink-800 dark:text-sand-100">
+        <span className="text-ink-800 dark:text-sand-50">
           <Letters text="Onde" start={0} />
         </span>
-        <span className="splash-vou text-rust-500 dark:text-rust-400">
+        <span className="splash-vou text-ink-900 dark:text-brand-400 black:text-white">
           <Letters text="Vou" start={320} />
         </span>
-        <span className="splash-mark text-rust-500 dark:text-rust-400">
+        <span className="splash-mark text-ink-800 dark:text-brand-400">
           <span className="splash-question">?</span>
           <span className="splash-ping" />
           <span className="splash-ping splash-ping-2" />

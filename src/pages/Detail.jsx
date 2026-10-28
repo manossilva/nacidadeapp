@@ -76,7 +76,7 @@ export default function Detail({ type }) {
   const description = item.description || item.short_description
 
   return (
-    <div className="min-h-dvh flex flex-col" style={{ background: '#ede8df' }}>
+    <div className="min-h-dvh flex flex-col" style={{ background: '#f7f2e8' }}>
       {/* Hero */}
       <div className="relative w-full overflow-hidden" style={{ aspectRatio: '4/3' }}>
         {item.cover_image_url ? (
@@ -84,15 +84,15 @@ export default function Detail({ type }) {
         ) : (
           <div className="w-full h-full" style={{ background: 'linear-gradient(135deg, #8f6e49, #c4a882)' }} />
         )}
-        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(15,22,10,0.5) 0%, transparent 50%)' }} />
+        <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(14,14,13,0.5) 0%, transparent 50%)' }} />
 
         {/* Voltar */}
         <button
           onClick={() => navigate(-1)}
           className="absolute top-4 left-4 w-9 h-9 rounded-full flex items-center justify-center active:scale-95 transition-all"
-          style={{ background: 'rgba(237,232,223,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)' }}
+          style={{ background: 'rgba(247,242,232,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)' }}
         >
-          <svg className="w-4 h-4" fill="none" stroke="#1f2e1a" strokeWidth={2.2} viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="#1f1e1c" strokeWidth={2.2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
@@ -101,9 +101,9 @@ export default function Detail({ type }) {
         <button
           onClick={handleShare}
           className="absolute top-4 right-4 w-9 h-9 rounded-full flex items-center justify-center active:scale-95 transition-all"
-          style={{ background: 'rgba(237,232,223,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)' }}
+          style={{ background: 'rgba(247,242,232,0.75)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.5)' }}
         >
-          <svg className="w-4 h-4" fill="none" stroke="#1f2e1a" strokeWidth={2.2} viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="#1f1e1c" strokeWidth={2.2} viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
           </svg>
         </button>
@@ -112,8 +112,8 @@ export default function Detail({ type }) {
       {/* Conteúdo */}
       <div className="max-w-lg mx-auto w-full px-4 pb-12">
         <div className="pt-5">
-          <h1 className="text-2xl font-bold leading-tight" style={{ color: '#1f2e1a' }}>{item.name}</h1>
-          <div className="flex flex-wrap items-center gap-2 mt-1.5 text-sm" style={{ color: '#728c68' }}>
+          <h1 className="text-2xl font-bold leading-tight" style={{ color: '#1f1e1c' }}>{item.name}</h1>
+          <div className="flex flex-wrap items-center gap-2 mt-1.5 text-sm" style={{ color: '#858179' }}>
             {item.category && <span className="capitalize font-medium">{item.category}</span>}
             {item.price_range && <><span>·</span><span>{item.price_range}</span></>}
             {item.neighborhood && <><span>·</span><span>{item.neighborhood}</span></>}
@@ -124,16 +124,16 @@ export default function Detail({ type }) {
         {type === 'event' && item.starts_at && (
           <div
             className="mt-4 px-4 py-3 rounded-2xl"
-            style={{ background: 'rgba(46,66,38,0.08)', border: '1px solid rgba(46,66,38,0.12)' }}
+            style={{ background: 'rgba(51,49,46,0.08)', border: '1px solid rgba(51,49,46,0.12)' }}
           >
-            <p className="text-sm font-semibold capitalize" style={{ color: '#2e4226' }}>{formatDate(item.starts_at)}</p>
-            {item.price_info && <p className="text-xs mt-0.5 font-medium" style={{ color: '#e35220' }}>{item.price_info}</p>}
+            <p className="text-sm font-semibold capitalize" style={{ color: '#33312e' }}>{formatDate(item.starts_at)}</p>
+            {item.price_info && <p className="mt-1 inline-block text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-400 text-ink-900">{item.price_info}</p>}
           </div>
         )}
 
         {/* Endereço */}
         {(item.address || item.custom_location) && (
-          <p className="mt-4 text-sm flex items-start gap-2" style={{ color: '#52703d' }}>
+          <p className="mt-4 text-sm flex items-start gap-2" style={{ color: '#64615a' }}>
             <svg className="w-4 h-4 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -144,20 +144,20 @@ export default function Detail({ type }) {
 
         {/* Horário */}
         {type === 'place' && item.opening_hours && (
-          <p className="mt-2 text-xs" style={{ color: '#9aad92' }}>{formatHours(item.opening_hours)}</p>
+          <p className="mt-2 text-xs" style={{ color: '#aeaaa1' }}>{formatHours(item.opening_hours)}</p>
         )}
 
         {/* Descrição */}
         {description && (
           <div className="mt-5">
-            <p className={`text-sm leading-relaxed ${!expanded ? 'line-clamp-4' : ''}`} style={{ color: '#2e4226' }}>
+            <p className={`text-sm leading-relaxed ${!expanded ? 'line-clamp-4' : ''}`} style={{ color: '#33312e' }}>
               {description}
             </p>
             {description.length > 200 && (
               <button
                 onClick={() => setExpanded(v => !v)}
                 className="text-sm font-semibold mt-1.5"
-                style={{ color: '#3d5733' }}
+                style={{ color: '#4a4843' }}
               >
                 {expanded ? 'Ver menos' : 'Ver mais'}
               </button>
@@ -213,7 +213,7 @@ export default function Detail({ type }) {
             target="_blank"
             rel="noopener noreferrer"
             className="mt-4 flex items-center gap-2 text-sm font-medium"
-            style={{ color: '#9aad92' }}
+            style={{ color: '#aeaaa1' }}
           >
             @{item.instagram.replace('@', '')} no Instagram
           </a>
@@ -225,7 +225,7 @@ export default function Detail({ type }) {
 
 function LoadingDetail() {
   return (
-    <div className="min-h-dvh" style={{ background: '#ede8df' }}>
+    <div className="min-h-dvh" style={{ background: '#f7f2e8' }}>
       <div className="aspect-[4/3] animate-pulse" style={{ background: 'rgba(212,191,160,0.5)' }} />
       <div className="p-4 space-y-3">
         <div className="h-7 rounded-xl animate-pulse w-2/3" style={{ background: 'rgba(212,191,160,0.5)' }} />
@@ -238,9 +238,9 @@ function LoadingDetail() {
 function NotFound() {
   const navigate = useNavigate()
   return (
-    <div className="min-h-dvh flex flex-col items-center justify-center px-4 text-center" style={{ background: '#ede8df' }}>
-      <h2 className="text-lg font-semibold" style={{ color: '#1f2e1a' }}>Não encontrado</h2>
-      <p className="text-sm mt-1 mb-4" style={{ color: '#9aad92' }}>Esse lugar ou evento sumiu.</p>
+    <div className="min-h-dvh flex flex-col items-center justify-center px-4 text-center" style={{ background: '#f7f2e8' }}>
+      <h2 className="text-lg font-semibold" style={{ color: '#1f1e1c' }}>Não encontrado</h2>
+      <p className="text-sm mt-1 mb-4" style={{ color: '#aeaaa1' }}>Esse lugar ou evento sumiu.</p>
       <button onClick={() => navigate('/')} className="btn-primary max-w-xs">Voltar pro início</button>
     </div>
   )

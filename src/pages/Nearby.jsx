@@ -189,7 +189,7 @@ export default function Nearby() {
       {!loading && !position && (
         <div className="py-14 text-center">
           <div className="w-16 h-16 rounded-2xl glass flex items-center justify-center mx-auto mb-4">
-            <IcPin className="w-8 h-8 text-ink-600 dark:text-sand-300" />
+            <IcPin className="w-8 h-8 ic" />
           </div>
           <p className="font-semibold text-ink-700 dark:text-sand-200">Defina sua localização</p>
           <p className="text-sm text-ink-500 dark:text-ink-400 mt-1 mb-5">

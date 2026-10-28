@@ -24,14 +24,14 @@ export default function NearbyCircles({ items, loading, onRequestLocation, hasLo
         >
           <div
             className="w-16 h-16 rounded-full flex items-center justify-center"
-            style={{ background: 'rgba(255,252,247,0.55)', backdropFilter: 'blur(12px)', border: '2px dashed rgba(114,140,104,0.5)' }}
+            style={{ background: 'rgba(255,252,247,0.55)', backdropFilter: 'blur(12px)', border: '2px dashed rgba(133,129,121,0.5)' }}
           >
-            <svg className="w-6 h-6" fill="none" stroke="#728c68" strokeWidth={1.8} viewBox="0 0 24 24">
+            <svg className="w-6 h-6" fill="none" stroke="#858179" strokeWidth={1.8} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
           </div>
-          <span className="text-[11px] font-medium text-center w-16 leading-tight" style={{ color: '#52703d' }}>
+          <span className="text-[11px] font-medium text-center w-16 leading-tight" style={{ color: '#64615a' }}>
             Ativar local
           </span>
         </button>
@@ -43,7 +43,7 @@ export default function NearbyCircles({ items, loading, onRequestLocation, hasLo
   if (loading) return <SkeletonCircles count={5} />
 
   if (!items || items.length === 0) {
-    return <p className="text-sm py-2" style={{ color: '#9aad92' }}>Nenhum lugar num raio de 1,5 km.</p>
+    return <p className="text-sm py-2" style={{ color: '#aeaaa1' }}>Nenhum lugar num raio de 1,5 km.</p>
   }
 
   const now = Date.now()
@@ -73,12 +73,12 @@ export default function NearbyCircles({ items, loading, onRequestLocation, hasLo
                 </div>
               )}
               {isLive && (
-                <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white" style={{ background: '#e35220' }} />
+                <span className="absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white" style={{ background: '#ffe000' }} />
               )}
             </div>
             <div className="text-center w-16">
-              <p className="text-[11px] font-medium leading-tight line-clamp-2" style={{ color: '#1f2e1a' }}>{item.name}</p>
-              <p className="text-[10px] mt-0.5" style={{ color: '#9aad92' }}>{formatDistance(item._distance)}</p>
+              <p className="text-[11px] font-medium leading-tight line-clamp-2" style={{ color: '#1f1e1c' }}>{item.name}</p>
+              <p className="text-[10px] mt-0.5" style={{ color: '#aeaaa1' }}>{formatDistance(item._distance)}</p>
             </div>
           </Link>
         )

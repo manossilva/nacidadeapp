@@ -21,9 +21,9 @@ export default function EventCard({ event, distance, compact }) {
           }
         </div>
         <div className="min-w-0">
-          <p className="font-semibold text-sm leading-tight line-clamp-1" style={{ color: '#1f2e1a' }}>{name}</p>
-          <p className="text-xs mt-0.5" style={{ color: '#728c68' }}>{formatDateShort(starts_at)}</p>
-          {price_info && <span className="mt-1 inline-block text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: 'rgba(227,82,32,0.1)', color: '#c43d12' }}>{price_info}</span>}
+          <p className="font-semibold text-sm leading-tight line-clamp-1" style={{ color: '#1f1e1c' }}>{name}</p>
+          <p className="text-xs mt-0.5" style={{ color: '#858179' }}>{formatDateShort(starts_at)}</p>
+          {price_info && <span className="mt-1 inline-block text-[10px] font-medium px-2 py-0.5 rounded-full" style={{ background: 'rgba(255,224,0,0.45)', color: '#33312e' }}>{price_info}</span>}
         </div>
       </Link>
     )
@@ -38,24 +38,24 @@ export default function EventCard({ event, distance, compact }) {
           <div className="w-full h-full" style={{ background: '#c4a882' }} />
         )}
         {is_featured && (
-          <span className="absolute top-2 left-2 badge text-[10px] px-2 py-1" style={{ background: 'rgba(30,42,22,0.82)', color: '#f5f0e8', backdropFilter: 'blur(6px)' }}>
+          <span className="absolute top-2 left-2 badge text-[10px] px-2 py-1" style={{ background: 'rgba(31,30,28,0.82)', color: '#f5f0e8', backdropFilter: 'blur(6px)' }}>
             Em alta
           </span>
         )}
         {price_info && (
-          <span className="absolute bottom-2 right-2 badge text-[10px] px-2 py-1" style={{ background: 'rgba(255,252,247,0.75)', color: '#c43d12', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.6)' }}>
+          <span className="absolute bottom-2 right-2 badge text-[10px] px-2 py-1" style={{ background: 'rgba(255,224,0,0.92)', color: '#141413', backdropFilter: 'blur(6px)', border: '1px solid rgba(255,255,255,0.6)' }}>
             {price_info}
           </span>
         )}
       </div>
       <div className="p-3">
-        <h3 className="font-semibold text-sm leading-tight" style={{ color: '#1f2e1a' }}>{name}</h3>
-        <div className="flex items-center gap-1.5 mt-1 text-xs" style={{ color: '#728c68' }}>
+        <h3 className="font-semibold text-sm leading-tight" style={{ color: '#1f1e1c' }}>{name}</h3>
+        <div className="flex items-center gap-1.5 mt-1 text-xs" style={{ color: '#858179' }}>
           {starts_at && <span>{timeFromNow(starts_at)}</span>}
           {distance != null && <><span>·</span><span>{formatDistance(distance)}</span></>}
         </div>
         {short_description && (
-          <p className="text-xs mt-1.5 line-clamp-2" style={{ color: '#52703d' }}>{short_description}</p>
+          <p className="text-xs mt-1.5 line-clamp-2" style={{ color: '#64615a' }}>{short_description}</p>
         )}
       </div>
     </Link>

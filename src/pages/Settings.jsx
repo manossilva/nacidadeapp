@@ -13,7 +13,7 @@ function Row({ icon, label, children }) {
   return (
     <div className="flex items-center justify-between py-3.5 border-b border-white/10 last:border-0">
       <div className="flex items-center gap-3">
-        <span className="text-ink-500 dark:text-ink-400">{icon}</span>
+        <span className="ic">{icon}</span>
         <span className="text-sm font-medium text-ink-700 dark:text-sand-200">{label}</span>
       </div>
       {children}
@@ -61,8 +61,8 @@ export default function Settings() {
                 onClick={() => setTheme(id)}
                 className={`flex flex-col items-center gap-2 py-3 rounded-2xl border transition-all ${
                   active
-                    ? 'bg-ink-800 dark:bg-white border-transparent text-white dark:text-ink-900'
-                    : 'glass border-white/30 text-ink-600 dark:text-sand-300'
+                    ? 'bubble-active border-transparent'
+                    : 'glass ic border-white/30'
                 }`}
               >
                 <Icon className="w-5 h-5" />

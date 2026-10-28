@@ -35,7 +35,7 @@ export default function Header() {
             className="w-9 h-9 flex items-center justify-center rounded-xl glass active:scale-90 transition-transform"
             aria-label="Alternar tema"
           >
-            <ThemeIcon className="w-4 h-4 text-ink-600 dark:text-sand-300" />
+            <ThemeIcon className="w-4 h-4 ic" />
           </button>
         </div>
       </div>

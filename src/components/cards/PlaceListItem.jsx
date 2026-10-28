@@ -64,7 +64,7 @@ export default function PlaceListItem({ place, hasEvent }) {
       {hasEvent && (
         <span
           className="absolute top-2.5 right-2.5 w-2.5 h-2.5 rounded-full animate-pulse"
-          style={{ background: '#f59e0b' }}
+          style={{ background: '#ffe000', boxShadow: '0 0 0 2px rgba(0,0,0,0.12)' }}
           title="Tem evento essa semana"
         />
       )}

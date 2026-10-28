@@ -21,8 +21,8 @@ export default function Eventos() {
   return (
     <PageShell>
       <div className="pt-5 pb-4">
-        <h1 className="text-2xl font-bold" style={{ color: '#1f2e1a' }}>Eventos</h1>
-        <p className="text-sm mt-0.5" style={{ color: '#728c68' }}>O que tá rolando em Aracaju</p>
+        <h1 className="text-2xl font-bold" style={{ color: '#1f1e1c' }}>Eventos</h1>
+        <p className="text-sm mt-0.5" style={{ color: '#858179' }}>O que tá rolando em Aracaju</p>
       </div>
 
       <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">

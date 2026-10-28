@@ -1,3 +1,5 @@
+import plugin from 'tailwindcss/plugin'
+
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
@@ -5,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Fundo bege quente
+        // Fundo bege quente (tema claro)
         sand: {
           50:  '#faf8f4',
           100: '#f5f0e8',
@@ -18,33 +20,33 @@ export default {
           800: '#6e5238',
           900: '#4e3928',
         },
-        // Acento escuro — verde musgo profundo
+        // Texto e superfícies — grafite neutro levemente quente
         ink: {
-          50:  '#f2f4f1',
-          100: '#e0e5dd',
-          200: '#bfcbb9',
-          300: '#9aad92',
-          400: '#728c68',
-          500: '#527044',
-          600: '#3d5733',
-          700: '#2e4226',
-          800: '#1f2e1a',
-          900: '#121b0f',
-          950: '#090e07',
+          50:  '#f7f6f3',
+          100: '#ebe9e4',
+          200: '#d6d3cc',
+          300: '#aeaaa1',
+          400: '#858179',
+          500: '#64615a',
+          600: '#4a4843',
+          700: '#33312e',
+          800: '#1f1e1c',
+          900: '#141413',
+          950: '#0a0a09',
         },
-        // Destaque quente
-        rust: {
-          50:  '#fef4f0',
-          100: '#fde6dc',
-          200: '#f9c6b1',
-          300: '#f4a07e',
-          400: '#ed7548',
-          500: '#e35220',
-          600: '#c43d12',
-          700: '#9e2f0e',
-          800: '#7a2410',
-          900: '#5c1c0d',
-        }
+        // Amarelo da marca OndeVou — 400 é o principal (fundo do ícone)
+        brand: {
+          50:  '#fffce8',
+          100: '#fff7c4',
+          200: '#fff08f',
+          300: '#ffe955',
+          400: '#ffe000',
+          500: '#f2cf00',
+          600: '#c9aa00',
+          700: '#8f7900',
+          800: '#4a3f00',
+          900: '#1f1b00',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -59,5 +61,8 @@ export default {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    // Tema preto (html.dark.black): black:text-white etc. vence o dark:
+    plugin(({ addVariant }) => addVariant('black', '.black &')),
+  ],
 }

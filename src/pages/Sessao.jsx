@@ -16,7 +16,7 @@ function SessaoHeader({ category, cityName, onBack, routerState }) {
         <div className="h-14 flex items-center gap-3">
           <button
             onClick={onBack}
-            className="w-9 h-9 flex-none flex items-center justify-center rounded-xl glass active:scale-90 transition-transform text-ink-700 dark:text-sand-200"
+            className="w-9 h-9 flex-none flex items-center justify-center rounded-xl glass ic active:scale-90 transition-transform"
             aria-label="Voltar para o início"
           >
             <IcChevronLeft className="w-5 h-5" />
@@ -45,14 +45,12 @@ function SessaoHeader({ category, cityName, onBack, routerState }) {
                 className="flex flex-col items-center gap-1 active:scale-95 transition-transform"
               >
                 <span className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                  active
-                    ? 'bg-ink-800 text-sand-50 dark:bg-sand-100 dark:text-ink-900 shadow-md'
-                    : 'glass text-ink-600 dark:text-sand-300'
+                  active ? 'bubble-active' : 'bubble'
                 }`}>
                   <Icon className="w-[1.125rem] h-[1.125rem]" />
                 </span>
                 <span className={`text-[8px] font-bold uppercase whitespace-nowrap ${
-                  active ? 'text-ink-800 dark:text-sand-100' : 'text-ink-400 dark:text-ink-500'
+                  active ? 'text-ink-900 dark:text-brand-400 black:text-white' : 'text-ink-400 dark:text-ink-500'
                 }`}>
                   {label}
                 </span>
@@ -118,7 +116,7 @@ export default function Sessao() {
         {/* Prompt de localização */}
         {!position && !geoLoading && (
           <div className="glass rounded-2xl p-4 mb-4 flex items-center gap-3">
-            <IcPin className="w-5 h-5 text-ink-500 dark:text-sand-300 flex-none" />
+            <IcPin className="w-5 h-5 ic flex-none" />
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-ink-700 dark:text-sand-200">Ative a localização</p>
               <p className="text-xs text-ink-400 mt-0.5">Para ver os lugares de {category.label.toLowerCase()} perto de você</p>

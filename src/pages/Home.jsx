@@ -20,10 +20,10 @@ function SessionGrid() {
           state={{ fromHome: true }}
           className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
         >
-          <span className="w-[clamp(3.25rem,8.5dvh,4.75rem)] aspect-square rounded-full glass flex items-center justify-center text-ink-700 dark:text-sand-200">
+          <span className="w-[clamp(3.25rem,8.5dvh,4.75rem)] aspect-square rounded-full bubble flex items-center justify-center">
             <Icon className="w-[42%] h-[42%]" />
           </span>
-          <span className="text-[11px] font-bold uppercase tracking-wider text-ink-600 dark:text-ink-300">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-ink-700 dark:text-ink-200 black:text-white">
             {label}
           </span>
         </Link>
@@ -47,9 +47,9 @@ export default function Home() {
   const initialCity = useRef(cityName)
   const cityChanged = cityName !== initialCity.current
 
-  // Agenda da semana → banner de evento privado e banner da prefeitura
+  // Agenda da semana → banner de evento privado e banner de eventos públicos
   const { events } = useEvents({ period: 'week', limit: 30 })
-  const { privados, prefeitura } = useMemo(() => splitBannerEvents(events), [events])
+  const { privados, publicos } = useMemo(() => splitBannerEvents(events), [events])
 
   // Título sempre em uma linha: a fonte encolhe para nomes de cidade longos
   const titleChars = (cityName ? `O que rola em ${cityName} hoje?` : 'O que rola por aqui hoje?').length
@@ -67,14 +67,14 @@ export default function Home() {
           {cityName ? (
             <span
               key={cityName}
-              className={`min-w-0 truncate text-rust-500 dark:text-rust-400 ${cityChanged ? 'city-swap' : ''}`}
+              className={`min-w-0 truncate accent-text ${cityChanged ? 'city-swap' : ''}`}
             >
               {cityName}
             </span>
           ) : (
             <button
               onClick={requestGPS}
-              className={`text-rust-500 dark:text-rust-400 ${geoLoading ? 'animate-pulse' : ''}`}
+              className={`accent-text ${geoLoading ? 'animate-pulse' : ''}`}
               aria-label="Usar minha localização"
             >
               por aqui
@@ -83,11 +83,11 @@ export default function Home() {
           <span className="flex-none">hoje?</span>
         </h1>
 
-        <BannerCarousel items={privados} variant="private" label="Eventos em destaque" className="flex-1 min-h-[7rem]" />
+        <BannerCarousel items={privados} variant="privado" className="flex-1 min-h-[7rem]" />
 
         <SessionGrid />
 
-        <BannerCarousel items={prefeitura} variant="prefeitura" interval={6500} label="Agenda da prefeitura" className="flex-1 min-h-[7rem]" />
+        <BannerCarousel items={publicos} variant="publico" interval={6500} className="flex-1 min-h-[7rem]" />
       </div>
     </PageShell>
   )
