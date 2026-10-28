@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 const OVERLAY = 'linear-gradient(to top, rgba(14,14,13,0.92) 0%, rgba(14,14,13,0.45) 55%, rgba(14,14,13,0.12) 100%)'
 
 const VARIANTS = {
-  privado: { label: 'Evento privado',   fallback: 'linear-gradient(135deg, #4a3f00, #c9aa00)' },
+  privado: { label: 'Eventos privados', fallback: 'linear-gradient(135deg, #4a3f00, #c9aa00)' },
   publico: { label: 'Eventos públicos', fallback: 'linear-gradient(135deg, #1f1e1c, #64615a)' },
 }
 

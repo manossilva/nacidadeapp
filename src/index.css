@@ -141,13 +141,20 @@
     background-image: linear-gradient(transparent 60%, rgba(255,224,0,0.8) 60%, rgba(255,224,0,0.8) 92%, transparent 92%);
   }
 
-  /* ── Bolinhas das sessões — degradê amarelo suave ── */
+  /* ── Bolinhas das sessões — iguais ao ícone do app: amarelo com traço preto, em todos os temas ── */
   .bubble {
-    background: linear-gradient(150deg, #fffdf2 0%, #fff3a6 100%);
-    border: 1px solid rgba(255,255,255,0.85);
-    box-shadow: 0 4px 18px rgba(242,207,0,0.18), inset 0 1px 0 rgba(255,255,255,0.9);
-    color: #1f1e1c;
+    background: #ffe000;
+    color: #0a0a09;
+    box-shadow: 0 6px 18px rgba(242,207,0,0.35);
   }
+  .bubble svg { stroke-width: 2.2; }
+  /* Sessão aberta na tela interna: invertida (preta com ícone amarelo) */
+  .bubble-current {
+    background: #0a0a09;
+    color: #ffe000;
+    box-shadow: 0 0 0 2px #ffe000, 0 6px 18px rgba(242,207,0,0.35);
+  }
+  .bubble-current svg { stroke-width: 2.2; }
   .bubble-active {
     background: #ffe000;
     color: #141413;
@@ -207,12 +214,7 @@
   .dark .pill-active { background: #ffe000; color: #141413; border-color: transparent; }
   .dark .ic { color: #ffe000; }
   .dark .accent-text { color: #ffe000; background-image: none; }
-  .dark .bubble {
-    background: linear-gradient(150deg, #262523 0%, #191918 100%);
-    border: 1px solid rgba(255,255,255,0.07);
-    box-shadow: 0 4px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.05);
-    color: #ffe000;
-  }
+  .dark .bubble { box-shadow: 0 6px 18px rgba(255,224,0,0.12); }
   .dark .nav-item { color: #64615a; }
   .dark .nav-item .nav-pill { color: rgba(255,224,0,0.6); }
   .dark .nav-item.is-active { color: #ffe000; }
@@ -273,12 +275,6 @@
   color: #000 !important;
 }
 .black .ic { color: #fff; }
-.black .bubble {
-  background: #0f0f0f;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: none;
-  color: #fff;
-}
 .black .nav-item { color: #8a8a8a; }
 .black .nav-item .nav-pill { color: #8a8a8a; }
 .black .nav-item.is-active { color: #fff; }

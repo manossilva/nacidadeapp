@@ -45,7 +45,7 @@ function SessaoHeader({ category, cityName, onBack, routerState }) {
                 className="flex flex-col items-center gap-1 active:scale-95 transition-transform"
               >
                 <span className={`w-10 h-10 rounded-full flex items-center justify-center transition-colors ${
-                  active ? 'bubble-active' : 'bubble'
+                  active ? 'bubble-current' : 'bubble'
                 }`}>
                   <Icon className="w-[1.125rem] h-[1.125rem]" />
                 </span>
