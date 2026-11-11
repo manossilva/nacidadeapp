@@ -19,17 +19,25 @@ const FIELD_MASK = [
   'places.googleMapsUri',
 ].join(',')
 
-export async function searchNearby({ lat, lng, radiusMeters = 5000, type = null, maxResults = 20 }) {
+// A API do Google só aceita raio de até 50 km
+export const MAX_RADIUS_METERS = 50_000
+
+function apiKey() {
   const key = import.meta.env.VITE_GOOGLE_MAPS_KEY
   if (!key || key === 'sua_google_maps_api_key_aqui') {
     throw new Error('no_key')
   }
+  return key
+}
+
+export async function searchNearby({ lat, lng, radiusMeters = 5000, type = null, maxResults = 20 }) {
+  const key = apiKey()
 
   const body = {
     locationRestriction: {
       circle: {
         center: { latitude: lat, longitude: lng },
-        radius: radiusMeters,
+        radius: Math.min(radiusMeters, MAX_RADIUS_METERS),
       },
     },
     maxResultCount: Math.min(maxResults, 20),
@@ -55,6 +63,21 @@ export async function searchNearby({ lat, lng, radiusMeters = 5000, type = null,
 
   const data = await res.json()
   return data.places ?? []
+}
+
+// Um local pelo id — para abrir o perfil da loja por link direto
+export async function getPlace(id) {
+  const res = await fetch(`${BASE}/places/${encodeURIComponent(id)}?languageCode=pt-BR`, {
+    headers: {
+      'X-Goog-Api-Key': apiKey(),
+      'X-Goog-FieldMask': FIELD_MASK.replaceAll('places.', ''),
+    },
+  })
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}))
+    throw new Error(err.error?.message ?? `Places API ${res.status}`)
+  }
+  return res.json()
 }
 
 export function getPhotoUrl(photoName, maxWidth = 400) {

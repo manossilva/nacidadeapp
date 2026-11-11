@@ -6,8 +6,11 @@ import { useCity } from '../hooks/useCity'
 import CityModal from '../components/ui/CityModal'
 import { supabase } from '../lib/supabase'
 import {
-  IcSun, IcMoon, IcCircle, IcPin, IcUser, IcKey, IcLogout, IcInfo, IcChevronRight
+  IcSun, IcMoon, IcCircle, IcPin, IcUser, IcLogout, IcInfo, IcChevronRight, IcStore, IcLandmark
 } from '../components/ui/Icons'
+import { LOGIN_TYPES } from '../lib/loginTypes'
+
+const LOGIN_ICONS = { usuario: IcUser, parceiro: IcStore, orgao: IcLandmark }
 
 function Row({ icon, label, children }) {
   return (
@@ -99,11 +102,19 @@ export default function Settings() {
             </Row>
           </>
         ) : (
-          <Row icon={<IcKey className="w-4 h-4" />} label="Entrar na conta">
-            <button onClick={() => navigate('/login')} className="text-sm font-semibold text-ink-700 dark:text-sand-200 flex items-center gap-1">
-              Entrar <IcChevronRight className="w-3.5 h-3.5" />
-            </button>
-          </Row>
+          Object.entries(LOGIN_TYPES).map(([tipo, { menuLabel }]) => {
+            const Icon = LOGIN_ICONS[tipo]
+            return (
+              <Row key={tipo} icon={<Icon className="w-4 h-4" />} label={menuLabel}>
+                <button
+                  onClick={() => navigate(`/login?tipo=${tipo}`)}
+                  className="text-sm font-semibold text-ink-700 dark:text-sand-200 flex items-center gap-1"
+                >
+                  Entrar <IcChevronRight className="w-3.5 h-3.5" />
+                </button>
+              </Row>
+            )
+          })
         )}
       </section>
 

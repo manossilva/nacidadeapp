@@ -1,9 +1,13 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { supabase } from '../../lib/supabase'
+import { AppIcon } from '../../components/ui/Logo'
+import { LOGIN_TYPES } from '../../lib/loginTypes'
 
 export default function Login() {
   const navigate = useNavigate()
+  const [params] = useSearchParams()
+  const type = LOGIN_TYPES[params.get('tipo')] ?? LOGIN_TYPES.usuario
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -36,11 +40,9 @@ export default function Login() {
 
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl glass mb-4">
-            <span className="text-2xl">🌊</span>
-          </div>
-          <h1 className="text-2xl font-bold text-ink-800">OndeVou</h1>
-          <p className="text-sm text-ink-400 mt-1">Bem-vindo de volta</p>
+          <AppIcon className="w-14 h-14 mb-4" />
+          <h1 className="text-2xl font-bold text-ink-800 dark:text-sand-50">{type.title}</h1>
+          <p className="text-sm text-ink-400 mt-1">{type.subtitle}</p>
         </div>
 
         <form onSubmit={handleLogin} className="glass rounded-3xl p-6 space-y-4">

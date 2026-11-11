@@ -493,3 +493,30 @@
 @media (prefers-reduced-motion: reduce) {
   .banner-kenburns, .screen-enter { animation: none; }
 }
+
+/* ── Etiqueta de conteúdo de exemplo (lojas e eventos fictícios) ── */
+.chip-example {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px dashed rgba(31,30,28,0.35);
+  color: #64615a;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.dark .chip-example { border-color: rgba(255,255,255,0.3); color: #aeaaa1; }
+
+/* ── Bolinha dos eventos públicos na agenda: preta com ícone amarelo ── */
+.bubble-public {
+  background: #0a0a09;
+  color: #ffe000;
+  box-shadow: inset 0 0 0 1px rgba(255,224,0,0.4);
+}
+.bubble-public svg { stroke-width: 2.2; }
+
+/* ── História recolhida na aba Onde estou ── */
+.history-fade { background: linear-gradient(to top, rgba(253,250,243,0.97), transparent); }
+.dark .history-fade { background: linear-gradient(to top, rgba(31,30,28,0.97), transparent); }
+.black .history-fade { background: linear-gradient(to top, rgb(18,18,18), transparent); }

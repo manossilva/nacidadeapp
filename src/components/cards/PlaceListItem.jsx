@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { IcMap } from '../ui/Icons'
 import { getPhotoUrl, typeLabel } from '../../lib/googlePlaces'
 import { formatDistance } from '../../lib/geolocation'
 
-// Item da lista de locais do Google Places — abre no Google Maps
+// Item da lista de locais do Google Places — abre o perfil da loja
 export default function PlaceListItem({ place, hasEvent }) {
+  const navigate = useNavigate()
   const [imgErr, setImgErr] = useState(false)
   const name     = place.displayName?.text ?? 'Local'
   const photo    = (!imgErr && place.photos?.[0]?.name)
@@ -14,13 +16,14 @@ export default function PlaceListItem({ place, hasEvent }) {
   const type     = typeLabel(place.primaryType)
   const distance = place._distance != null ? formatDistance(place._distance) : null
 
-  function openMaps() {
-    if (place.googleMapsUri) window.open(place.googleMapsUri, '_blank', 'noopener')
+  // O local vai junto no estado da rota: o perfil abre sem nova consulta ao Google
+  function openProfile() {
+    navigate(`/loja/${place.id}`, { state: { place } })
   }
 
   return (
     <div
-      onClick={openMaps}
+      onClick={openProfile}
       className="card flex items-center gap-3 p-3 cursor-pointer active:scale-[0.98] transition-transform relative"
     >
       {/* Foto miniatura */}

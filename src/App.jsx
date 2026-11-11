@@ -5,8 +5,8 @@ import Lugares from './pages/Lugares'
 import Eventos from './pages/Eventos'
 import Feed from './pages/Feed'
 import Detail from './pages/Detail'
-import Nearby from './pages/Nearby'
-import Tourism from './pages/Tourism'
+import Loja from './pages/Loja'
+import OndeEstou from './pages/OndeEstou'
 import Roteiros from './pages/Roteiros'
 import ShareCard from './pages/ShareCard'
 import Login from './pages/auth/Login'
@@ -32,15 +32,17 @@ export default function App() {
         <Route path="/lugares" element={<Lugares />} />
         <Route path="/lugares/:categoria" element={<Lugares />} />
         <Route path="/eventos" element={<Eventos />} />
-        <Route path="/agenda-publica" element={<Eventos />} />
+        <Route path="/agenda-publica" element={<Navigate to="/onde-estou#agenda-publica" replace />} />
         <Route path="/feed" element={<Feed />} />
         <Route path="/local/:slug" element={<Detail type="place" />} />
         <Route path="/evento/:slug" element={<Detail type="event" />} />
-        <Route path="/perto-de-mim" element={<Nearby />} />
-        <Route path="/onde-estou" element={<Nearby />} />
+        <Route path="/loja/:id" element={<Loja />} />
 
-        {/* Turismo */}
-        <Route path="/turismo" element={<Tourism />} />
+        {/* Onde estou — história da cidade e agenda pública (antes: Turismo) */}
+        <Route path="/onde-estou" element={<OndeEstou />} />
+        <Route path="/turismo" element={<Navigate to="/onde-estou" replace />} />
+        <Route path="/perto-de-mim" element={<Navigate to="/" replace />} />
+
         <Route path="/roteiros" element={<Roteiros />} />
 
         {/* Compartilhar — estilo Strava */}

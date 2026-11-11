@@ -5,7 +5,7 @@ import BannerCarousel from '../components/cards/BannerCarousel'
 import { useEvents } from '../hooks/usePlaces'
 import { useLocation } from '../hooks/useLocation'
 import { HOME_CATEGORIES } from '../lib/categories'
-import { splitBannerEvents } from '../lib/banners'
+import { sponsoredBanners, publicBanners } from '../lib/banners'
 
 // O GPS atualiza uma vez por abertura do app — voltar pelo "Início" não pede de novo
 let autoLocated = false
@@ -47,9 +47,11 @@ export default function Home() {
   const initialCity = useRef(cityName)
   const cityChanged = cityName !== initialCity.current
 
-  // Agenda da semana → banner de evento privado e banner de eventos públicos
+  // Banner de cima: lojas que pagam pelo anúncio (até 5 por dia) → perfil da loja.
+  // Banner de baixo: eventos públicos da semana → agenda pública em "Onde estou".
   const { events } = useEvents({ period: 'week', limit: 30 })
-  const { privados, publicos } = useMemo(() => splitBannerEvents(events), [events])
+  const privados = useMemo(() => sponsoredBanners(), [])
+  const publicos = useMemo(() => publicBanners(events), [events])
 
   // Título sempre em uma linha: a fonte encolhe para nomes de cidade longos
   const titleChars = (cityName ? `O que rola em ${cityName} hoje?` : 'O que rola por aqui hoje?').length

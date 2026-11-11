@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams, useLocation as useRouterLocation } from 'react-router-dom'
 import PageShell from '../components/layout/PageShell'
 import PlaceListItem from '../components/cards/PlaceListItem'
@@ -7,6 +7,53 @@ import { useEvents } from '../hooks/usePlaces'
 import { useLocation } from '../hooks/useLocation'
 import { useGooglePlaces } from '../hooks/useGooglePlaces'
 import { HOME_CATEGORIES } from '../lib/categories'
+
+const RADIUS_SHORTCUTS = [1, 5, 10]
+const MAX_RADIUS_KM = 100
+
+const normalize = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+
+// Raio da busca: atalhos de 1, 5 e 10 km ou arrastar até 100 km.
+// A consulta só é refeita ao soltar o controle, não a cada passo do arraste.
+function RadiusControl({ value, onChange, cityName }) {
+  const [draft, setDraft] = useState(value)
+  useEffect(() => { setDraft(value) }, [value])
+  const commit = () => { if (draft !== value) onChange(draft) }
+
+  return (
+    <div className="glass rounded-2xl px-4 py-3 mb-4">
+      <div className="flex items-center gap-2">
+        {RADIUS_SHORTCUTS.map(km => (
+          <button
+            key={km}
+            onClick={() => onChange(km)}
+            aria-pressed={value === km}
+            className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${value === km ? 'pill-active' : 'pill'}`}
+          >
+            {km} km
+          </button>
+        ))}
+        <span className="ml-auto text-xs font-bold text-ink-800 dark:text-sand-100">até {draft} km</span>
+      </div>
+      <input
+        type="range"
+        min={1}
+        max={MAX_RADIUS_KM}
+        step={1}
+        value={draft}
+        onChange={e => setDraft(Number(e.target.value))}
+        onPointerUp={commit}
+        onKeyUp={commit}
+        onBlur={commit}
+        aria-label="Raio da busca em quilômetros"
+        className="w-full mt-3 accent-brand-500"
+      />
+      {cityName && (
+        <p className="text-[11px] text-ink-400 mt-1">Só aparecem lugares de {cityName}, mesmo com o raio maior que a cidade.</p>
+      )}
+    </div>
+  )
+}
 
 // Tela interna de uma sessão: sessões menores em cima, todos os locais dela embaixo
 function SessaoHeader({ category, cityName, onBack, routerState }) {
@@ -69,13 +116,20 @@ export default function Sessao() {
   const navigate = useNavigate()
   const routerLocation = useRouterLocation()
 
-  const { position, cityName, radiusKm, loading: geoLoading, requestGPS } = useLocation()
-  const { places, loading: placesLoading, error } = useGooglePlaces({
+  const { position, cityName, radiusKm, setRadius, loading: geoLoading, requestGPS } = useLocation()
+  const { places: found, loading: placesLoading, error } = useGooglePlaces({
     lat: category ? position?.lat : null,
     lng: category ? position?.lng : null,
     radiusKm,
     type: category?.types,
   })
+
+  // Raio maior que a cidade não traz lugares de fora: fica só quem tem a cidade no endereço
+  const places = useMemo(() => {
+    if (!cityName) return found
+    const city = normalize(cityName)
+    return found.filter(p => !p.formattedAddress || normalize(p.formattedAddress).includes(city))
+  }, [found, cityName])
 
   // Eventos da semana para a bolinha piscando nos locais
   const { events: weekEvents } = useEvents({ period: 'week', limit: 50 })
@@ -127,6 +181,8 @@ export default function Sessao() {
           </div>
         )}
 
+        {position && <RadiusControl value={radiusKm} onChange={setRadius} cityName={cityName} />}
+
         {/* Skeleton */}
         {loading && (
           <div className="space-y-3">
@@ -147,7 +203,7 @@ export default function Sessao() {
             <div className="py-10 text-center">
               <IcSearch className="w-8 h-8 text-ink-300 dark:text-ink-600 mx-auto mb-2" />
               <p className="text-sm text-ink-500 dark:text-ink-400">
-                Nenhum lugar de {category.label.toLowerCase()} nesse raio.
+                Nenhum lugar de {category.label.toLowerCase()} em até {radiusKm} km{cityName ? ` em ${cityName}` : ''}.
               </p>
             </div>
           ) : (
