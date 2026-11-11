@@ -35,7 +35,7 @@ export default function AdminEvents() {
   useEffect(() => { load() }, [])
 
   async function handleDelete(id) {
-    if (!confirm('Deletar este evento?')) return
+    if (!confirm('Excluir este evento?')) return
     await supabase.from('events').delete().eq('id', id)
     load()
   }
@@ -101,7 +101,7 @@ export default function AdminEvents() {
                     Editar
                   </button>
                   <button onClick={() => handleDelete(event.id)} className="text-xs text-red-500 hover:text-red-700 font-medium">
-                    Del
+                    Excluir
                   </button>
                 </div>
               </div>

@@ -30,7 +30,7 @@ export default function AdminPlaces() {
   useEffect(() => { load() }, [])
 
   async function handleDelete(id) {
-    if (!confirm('Deletar este local? Ação irreversível.')) return
+    if (!confirm('Excluir este local? Esta ação não pode ser desfeita.')) return
     await supabase.from('places').delete().eq('id', id)
     load()
   }
@@ -105,7 +105,7 @@ export default function AdminPlaces() {
                     onClick={() => handleDelete(place.id)}
                     className="text-xs text-red-500 hover:text-red-700 font-medium"
                   >
-                    Del
+                    Excluir
                   </button>
                 </div>
               </div>

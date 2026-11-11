@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
 // `match` decide quando o item fica ativo — sessões e perfis de loja contam como Início
@@ -8,25 +9,46 @@ const navItems = [
   { to: '/configuracoes', label: 'Menu',        icon: MenuIcon,     match: p => p.startsWith('/configuracoes') || p.startsWith('/login') },
 ]
 
+// A barra é remontada a cada tela; guardar o último item ativo aqui deixa a
+// pílula sair de onde estava e correr até o novo, em vez de pular
+let lastIndex = -1
+
 export default function BottomNav() {
   const { pathname } = useLocation()
+  const index = navItems.findIndex(item => item.match(pathname))
+  const moved = lastIndex >= 0 && index >= 0 && lastIndex !== index
+  const [thumbAt, setThumbAt] = useState(moved ? lastIndex : index)
+
+  useEffect(() => {
+    lastIndex = index
+    if (thumbAt === index) return
+    const frame = requestAnimationFrame(() => setThumbAt(index))
+    return () => cancelAnimationFrame(frame)
+  }, [index, thumbAt])
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 safe-bottom nav-bg">
-      <div className="max-w-2xl mx-auto flex h-16">
-        {navItems.map(({ to, label, icon: Icon, match }) => {
-          const active = match(pathname)
+      <div className="relative max-w-2xl mx-auto flex h-16">
+        <span
+          aria-hidden="true"
+          className="nav-thumb"
+          style={thumbAt >= 0 ? { transform: `translateX(${thumbAt * 100}%)` } : { opacity: 0 }}
+        >
+          <span />
+        </span>
+        {navItems.map(({ to, label, icon: Icon, match }, i) => {
+          const active = i === index
           return (
             <Link
               key={to}
               to={to}
               aria-current={active ? 'page' : undefined}
-              className={`nav-item flex-1 flex flex-col items-center justify-center gap-1 text-[10px] font-semibold transition-colors ${
+              className={`nav-item flex-1 flex flex-col items-center justify-center gap-1 text-[10px] leading-3 font-semibold transition-colors duration-300 ${
                 active ? 'is-active' : ''
-              }`}
+              } ${active && moved ? 'is-fresh' : ''}`}
             >
-              {/* Ícones são só contorno: o ativo ganha traço mais forte e uma pílula amarela */}
-              <span className="nav-pill h-7 w-12 rounded-full flex items-center justify-center transition-colors">
+              {/* Ícones são só contorno: o ativo ganha traço mais forte e fica sobre a pílula amarela */}
+              <span className="nav-pill h-7 w-12 rounded-full flex items-center justify-center">
                 <Icon strokeWidth={active ? 2.2 : 1.8} />
               </span>
               <span>{label}</span>

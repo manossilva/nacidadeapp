@@ -85,7 +85,7 @@ export default function AdminAdvertisers() {
               <input value={form.whatsapp} onChange={e => setForm(f => ({...f, whatsapp: e.target.value}))} className="input" />
             </div>
             <div>
-              <label className="text-xs text-gray-600 mb-1 block">Email</label>
+              <label className="text-xs text-gray-600 mb-1 block">E-mail</label>
               <input type="email" value={form.email} onChange={e => setForm(f => ({...f, email: e.target.value}))} className="input" />
             </div>
           </div>
@@ -145,7 +145,7 @@ export default function AdminAdvertisers() {
                     {a.payment_status === 'paid' && (
                       <button onClick={() => updateStatus(a.id, 'pending')} className="text-[10px] text-yellow-600 font-medium">Pendente</button>
                     )}
-                    <button onClick={() => handleDelete(a.id)} className="text-[10px] text-red-500 font-medium">Del</button>
+                    <button onClick={() => handleDelete(a.id)} className="text-[10px] text-red-500 font-medium">Excluir</button>
                   </div>
                 </div>
               </div>

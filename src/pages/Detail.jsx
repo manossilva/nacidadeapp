@@ -202,7 +202,7 @@ export default function Detail({ type }) {
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
             </svg>
-            Mandar pra galera
+            Enviar para os amigos
           </button>
         </div>
 
@@ -240,8 +240,8 @@ function NotFound() {
   return (
     <div className="min-h-dvh flex flex-col items-center justify-center px-4 text-center" style={{ background: '#f7f2e8' }}>
       <h2 className="text-lg font-semibold" style={{ color: '#1f1e1c' }}>Não encontrado</h2>
-      <p className="text-sm mt-1 mb-4" style={{ color: '#aeaaa1' }}>Esse lugar ou evento sumiu.</p>
-      <button onClick={() => navigate('/')} className="btn-primary max-w-xs">Voltar pro início</button>
+      <p className="text-sm mt-1 mb-4" style={{ color: '#aeaaa1' }}>Este lugar ou evento não está mais disponível.</p>
+      <button onClick={() => navigate('/')} className="btn-primary max-w-xs">Voltar para o início</button>
     </div>
   )
 }

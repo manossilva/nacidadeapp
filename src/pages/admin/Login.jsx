@@ -15,7 +15,7 @@ export default function AdminLogin() {
     setError(null)
     const { error: err } = await supabase.auth.signInWithPassword({ email, password })
     if (err) {
-      setError('Email ou senha inválidos.')
+      setError('E-mail ou senha inválidos.')
     } else {
       navigate('/admin')
     }
@@ -38,7 +38,7 @@ export default function AdminLogin() {
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
             <input
               type="email"
               value={email}

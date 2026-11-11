@@ -30,7 +30,7 @@ export default function EventPost({ event, inProfile = false }) {
   return (
     <article className="card max-w-[470px] mx-auto">
       <header className="flex items-center gap-2.5 px-3 py-2.5">
-        <Avatar name={organizer} className="w-9 h-9" />
+        <Avatar name={organizer} className="w-9 h-9" tone={isPublic ? 'civic' : 'brand'} />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold leading-tight truncate text-ink-900 dark:text-sand-50">{organizer}</p>
           {event.custom_location && (
@@ -52,9 +52,11 @@ export default function EventPost({ event, inProfile = false }) {
             />
           </div>
         ) : (
-          <div className="aspect-square bg-ink-900 flex flex-col justify-end p-6 pt-16">
-            <IcMegaphone className="w-10 h-10 text-brand-400 mb-auto" />
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-400">
+          <div className={`aspect-square flex flex-col justify-end p-6 pt-16 ${
+            isPublic ? 'bg-gradient-to-br from-civic-600 to-civic-700' : 'bg-ink-900'
+          }`}>
+            <IcMegaphone className={`w-10 h-10 mb-auto ${isPublic ? 'text-white' : 'text-brand-400'}`} />
+            <p className={`text-[11px] font-bold uppercase tracking-[0.18em] ${isPublic ? 'text-civic-300' : 'text-brand-400'}`}>
               {event.kind === 'aviso' || isPublic ? 'Aviso público' : 'Evento'}
             </p>
             <p className="text-2xl font-extrabold leading-tight text-white mt-2">{event.name}</p>
@@ -70,7 +72,7 @@ export default function EventPost({ event, inProfile = false }) {
         <div className="flex items-center gap-2">
           <button
             onClick={share}
-            className="w-9 h-9 -ml-1.5 flex items-center justify-center rounded-full ic active:scale-90 transition-transform"
+            className="tap w-9 h-9 -ml-1.5 flex items-center justify-center rounded-full ic"
             aria-label="Compartilhar"
           >
             <IcShare className="w-5 h-5" />

@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase'
 import AdminShell from '../../components/admin/AdminShell'
 
 const INTERACTIONS = ['view', 'whatsapp_click', 'share', 'maps_click']
-const LABELS = { view: 'Views', whatsapp_click: 'WA Clicks', share: 'Compartilhamentos', maps_click: 'Como chegar' }
+const LABELS = { view: 'Visualizações', whatsapp_click: 'Cliques no WhatsApp', share: 'Compartilhamentos', maps_click: 'Como chegar' }
 const ICONS = { view: '👁', whatsapp_click: '💬', share: '🤝', maps_click: '🗺️' }
 
 export default function AdminDashboard() {

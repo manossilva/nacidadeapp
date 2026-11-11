@@ -7,9 +7,20 @@
    escuro (.dark)        grafite com ícones em amarelo
    preto  (.dark.black)  preto e branco com detalhes em amarelo */
 
+/* ── Movimento — duas curvas para o app inteiro ──
+   --ease-ios  desliza e assenta sem quicar (telas, painéis, pílulas que correm)
+   --ease-pop  passa um pouco do ponto e volta (toques, coisas que "estalam") */
+:root {
+  --ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-pop: cubic-bezier(0.34, 1.45, 0.64, 1);
+}
+
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+  }
+  a, button, [role="button"] {
+    touch-action: manipulation;
   }
   body {
     background-color: #f7f2e8;
@@ -146,7 +157,7 @@
     background: #ffe000;
     color: #0a0a09;
     box-shadow: 0 6px 18px rgba(242,207,0,0.35);
-    transition: background-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
   }
   .bubble svg { stroke-width: 2.2; }
   /* Ativada: invertida (preta com ícone amarelo) — ao tocar na Home e a sessão aberta na tela interna */
@@ -156,6 +167,7 @@
     color: #ffe000;
     box-shadow: 0 0 0 2px #ffe000, 0 6px 18px rgba(242,207,0,0.35);
   }
+  .bubble-current { transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease; animation: pop 0.5s var(--ease-pop); }
   .bubble-current svg { stroke-width: 2.2; }
   .bubble-active {
     background: #ffe000;
@@ -166,7 +178,8 @@
   /* ── Barra inferior ── */
   .nav-item { color: #858179; }
   .nav-item.is-active { color: #141413; }
-  .nav-item.is-active .nav-pill { background: #ffe000; color: #141413; }
+  .nav-item.is-active .nav-pill { color: #141413; }
+  .nav-thumb > span { background: #ffe000; }
 
   /* ── Pin: miolo amarelo no claro, recortado nos escuros ── */
   .pin-dot { fill: #ffe000; }
@@ -220,7 +233,8 @@
   .dark .nav-item { color: #64615a; }
   .dark .nav-item .nav-pill { color: rgba(255,224,0,0.6); }
   .dark .nav-item.is-active { color: #ffe000; }
-  .dark .nav-item.is-active .nav-pill { background: rgba(255,224,0,0.14); color: #ffe000; }
+  .dark .nav-item.is-active .nav-pill { color: #ffe000; }
+  .dark .nav-thumb > span { background: rgba(255,224,0,0.14); }
   .dark .pin-dot { fill: #121211; }
 }
 
@@ -280,7 +294,8 @@
 .black .nav-item { color: #8a8a8a; }
 .black .nav-item .nav-pill { color: #8a8a8a; }
 .black .nav-item.is-active { color: #fff; }
-.black .nav-item.is-active .nav-pill { background: #ffe000; color: #000; }
+.black .nav-item.is-active .nav-pill { color: #000; }
+.black .nav-thumb > span { background: #ffe000; }
 .black .pin-dot { fill: #000; }
 
 /* ── Animação da saudação ── */
@@ -483,15 +498,240 @@
 
 /* ── Tela interna entrando como uma nova tela ── */
 @keyframes screenIn {
-  from { opacity: 0; transform: translateX(24px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateX(28px); }
+  to   { opacity: 1; transform: none; }
 }
 .screen-enter {
-  animation: screenIn 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: screenIn 0.5s var(--ease-ios) both;
 }
 
+/* ── Aba trocando: o conteúdo sobe de leve ── */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px) scale(0.985); }
+  to   { opacity: 1; transform: none; }
+}
+.page-enter {
+  animation: pageIn 0.45s var(--ease-ios) both;
+}
+
+/* ── Itens entrando em cascata (--i é a posição na lista) ── */
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+.rise {
+  animation: riseIn 0.55s var(--ease-ios) both;
+  animation-delay: calc(min(var(--i, 0), 8) * 45ms);
+}
+
+/* ── Texto trocando no lugar (título da sessão) ── */
+@keyframes swapIn {
+  from { opacity: 0; transform: translateY(0.4em); }
+  to   { opacity: 1; transform: none; }
+}
+.swap-in { animation: swapIn 0.4s var(--ease-ios) both; }
+
+@keyframes pop {
+  from { transform: scale(0.86); }
+  to   { transform: scale(1); }
+}
+
+/* ── Toque: afunda rápido e volta com mola ── */
+.tap {
+  transition: transform 0.45s var(--ease-pop), background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+.tap:active {
+  transform: scale(0.94);
+  transition-duration: 0.09s, 0.25s, 0.25s, 0.25s, 0.25s;
+  transition-timing-function: ease-out;
+}
+/* Peças grandes afundam menos */
+.card.tap:active { transform: scale(0.975); }
+.banner.tap:active { transform: scale(0.985); }
+
+/* ── Painel que abre e fecha empurrando o que vem abaixo ── */
+.reveal {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.5s var(--ease-ios), opacity 0.3s ease;
+}
+.reveal > * { min-height: 0; overflow: hidden; }
+.reveal.is-open { grid-template-rows: 1fr; opacity: 1; }
+.reveal-body {
+  transform: translateY(-8px) scale(0.98);
+  transform-origin: top center;
+  transition: transform 0.5s var(--ease-ios);
+}
+.reveal.is-open .reveal-body { transform: none; }
+
+/* ── Símbolos da fileira de filtros: só o ícone; o escolhido se estica e mostra o nome ── */
+.chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.25rem;
+  min-width: 2.25rem;
+  padding: 0 0.5625rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.7);
+  color: #33312e;
+}
+.chip[aria-pressed="true"],
+.chip[aria-expanded="true"] {
+  background: #ffe000;
+  border-color: transparent;
+  color: #141413;
+  box-shadow: 0 4px 14px rgba(242,207,0,0.4);
+}
+.chip-label {
+  display: grid;
+  grid-template-columns: 0fr;
+  opacity: 0;
+  transition: grid-template-columns 0.45s var(--ease-ios), margin-left 0.45s var(--ease-ios), opacity 0.3s ease;
+}
+.chip-label > span {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 700;
+}
+.chip[aria-pressed="true"] .chip-label {
+  grid-template-columns: 1fr;
+  margin-left: 0.375rem;
+  opacity: 1;
+}
+.dark .chip { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.09); color: #ffe000; }
+.black .chip { color: #fff; }
+.dark .chip[aria-pressed="true"],
+.dark .chip[aria-expanded="true"] { background: #ffe000; border-color: transparent; color: #141413; box-shadow: none; }
+
+/* ── Controle segmentado: a pílula amarela corre até a opção escolhida ── */
+.segmented {
+  position: relative;
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(31,30,28,0.07);
+}
+.segmented-thumb {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 0;
+  border-radius: 999px;
+  background: #ffe000;
+  box-shadow: 0 2px 8px rgba(60,50,20,0.16);
+  pointer-events: none;
+}
+.segmented.is-ready .segmented-thumb {
+  transition: transform 0.45s var(--ease-ios), width 0.45s var(--ease-ios), opacity 0.25s ease;
+}
+.segmented-item {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  padding: 0.4375rem 0.75rem;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  color: #64615a;
+  transition: color 0.25s ease, transform 0.45s var(--ease-pop);
+}
+.segmented-item:active { transform: scale(0.93); transition-duration: 0.25s, 0.09s; }
+.segmented-item[aria-pressed="true"] { color: #141413; }
+.dark .segmented { background: rgba(255,255,255,0.07); }
+.dark .segmented-item { color: #aeaaa1; }
+.dark .segmented-item[aria-pressed="true"] { color: #141413; }
+.dark .segmented-thumb { box-shadow: none; }
+
+/* ── Barra de arrastar (distância): trilho fino, parte percorrida em amarelo, botão branco ── */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 2rem;
+  background: transparent;
+  --ratio: 0;
+  --track: rgba(31,30,28,0.12);
+}
+.range:focus { outline: none; }
+.range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(to right, #ffe000 calc(13px + (100% - 26px) * var(--ratio)), var(--track) 0);
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px;
+  height: 26px;
+  margin-top: -10px;
+  border-radius: 50%;
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.06);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.18), 0 1px 1px rgba(0,0,0,0.1);
+  transition: transform 0.3s var(--ease-pop);
+}
+.range:active::-webkit-slider-thumb { transform: scale(1.15); }
+.range::-moz-range-track { height: 6px; border-radius: 999px; background: var(--track); }
+.range::-moz-range-progress { height: 6px; border-radius: 999px; background: #ffe000; }
+.range::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  border: 0.5px solid rgba(0,0,0,0.06);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.18), 0 1px 1px rgba(0,0,0,0.1);
+}
+.range:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 3px rgba(255,224,0,0.6), 0 3px 8px rgba(0,0,0,0.18); }
+.dark .range { --track: rgba(255,255,255,0.14); }
+
+/* ── Barra inferior: uma pílula só, que corre de um item para o outro ── */
+.nav-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 25%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  transition: transform 0.5s var(--ease-ios), opacity 0.2s ease;
+}
+.nav-thumb > span {
+  margin-top: 0.625rem;
+  width: 3rem;
+  height: 1.75rem;
+  border-radius: 999px;
+}
+.nav-item { position: relative; }
+.nav-item .nav-pill { transition: color 0.3s ease; }
+.nav-item.is-fresh .nav-pill { animation: pop 0.5s var(--ease-pop); }
+.nav-item:active .nav-pill { transform: scale(0.9); transition: transform 0.09s ease-out; }
+
+/* ── Tarja dos bares: cover artístico ── */
+.cover-band {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.3125rem 0.75rem;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cover-band.has-cover { background: #ffe000; color: #141413; }
+.cover-band.no-cover { background: rgba(31,30,28,0.06); color: #858179; }
+.dark .cover-band.no-cover { background: rgba(255,255,255,0.05); }
+
 @media (prefers-reduced-motion: reduce) {
-  .banner-kenburns, .screen-enter { animation: none; }
+  .banner-kenburns, .screen-enter, .page-enter, .rise, .swap-in, .bubble-current, .nav-item.is-fresh .nav-pill { animation: none; }
+  .tap, .reveal, .reveal-body, .chip-label, .segmented-thumb, .segmented-item, .nav-thumb { transition-duration: 0.01s !important; }
 }
 
 /* ── Etiqueta de conteúdo de exemplo (lojas e eventos fictícios) ── */
@@ -508,13 +748,25 @@
 }
 .dark .chip-example { border-color: rgba(255,255,255,0.3); color: #aeaaa1; }
 
-/* ── Bolinha dos eventos públicos na agenda: preta com ícone amarelo ── */
+/* ── Órgão público: azul, para se destacar do amarelo das lojas sem usar preto ── */
 .bubble-public {
-  background: #0a0a09;
-  color: #ffe000;
-  box-shadow: inset 0 0 0 1px rgba(255,224,0,0.4);
+  background: #2563eb;
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
-.bubble-public svg { stroke-width: 2.2; }
+.bubble-public svg,
+.bubble-public-current svg { stroke-width: 2.2; }
+/* Escolhida: invertida, como as bolinhas amarelas */
+.bubble-public-current {
+  background: #fff;
+  color: #2563eb;
+  box-shadow: 0 0 0 2px #2563eb, 0 6px 18px rgba(37,99,235,0.35);
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+  animation: pop 0.5s var(--ease-pop);
+}
+.ic-public { color: #2563eb; }
+.dark .ic-public { color: #6f9bff; }
 
 /* ── História recolhida na aba Onde estou ── */
 .history-fade { background: linear-gradient(to top, rgba(253,250,243,0.97), transparent); }

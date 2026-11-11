@@ -47,6 +47,15 @@ export default {
           800: '#4a3f00',
           900: '#1f1b00',
         },
+        // Azul dos órgãos públicos (prefeitura, avisos, agenda pública)
+        civic: {
+          300: '#a9c2ff',
+          400: '#6f9bff',
+          500: '#3b82f6',
+          600: '#2563eb',
+          700: '#1d4ed8',
+          900: '#152a63',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

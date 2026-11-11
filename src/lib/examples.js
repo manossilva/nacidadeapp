@@ -135,7 +135,8 @@ export const EXAMPLE_EVENTS = [
     short_description: 'Sanfona, zabumba e triângulo até a madrugada.',
     cover_image_url: img('1533174072545-7a4b6ad7a6c3'),
     starts_at: at(0, 21),
-    price_info: 'R$ 15',
+    price_info: 'Cover R$ 15',
+    has_cover: true,
   }),
   storeEvent('exemplo-studio-bem-viver', {
     id: 'exemplo-ev-aulao',

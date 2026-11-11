@@ -1,14 +1,18 @@
 import { useState } from 'react'
 
-// Avatar redondo no estilo do Instagram: logo/foto ou iniciais, com anel amarelo
-export default function Avatar({ name = '', src = null, className = 'w-10 h-10' }) {
+// Avatar redondo no estilo do Instagram: logo/foto ou iniciais, com anel
+// amarelo (lojas) ou azul (`tone="civic"`, órgãos públicos)
+export default function Avatar({ name = '', src = null, className = 'w-10 h-10', tone = 'brand' }) {
+  const civic = tone === 'civic'
   const [err, setErr] = useState(false)
   const initials = name.split(/\s+/).filter(w => w.length > 2).slice(0, 2).map(w => w[0]).join('').toUpperCase()
 
   return (
-    <span className={`flex-none rounded-full p-[2px] bg-brand-400 ${className}`}>
+    <span className={`flex-none rounded-full p-[2px] ${civic ? 'bg-civic-600' : 'bg-brand-400'} ${className}`}>
       <span
-        className="w-full h-full rounded-full overflow-hidden flex items-center justify-center bg-ink-900 text-brand-400 font-extrabold leading-none border-2 border-sand-50 dark:border-ink-900"
+        className={`w-full h-full rounded-full overflow-hidden flex items-center justify-center font-extrabold leading-none border-2 border-sand-50 dark:border-ink-900 ${
+          civic ? 'bg-civic-600 text-white' : 'bg-ink-900 text-brand-400'
+        }`}
         style={{ containerType: 'inline-size' }}
       >
         {src && !err ? (

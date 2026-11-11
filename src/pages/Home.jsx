@@ -18,7 +18,7 @@ function SessionGrid() {
           key={id}
           to={`/sessao/${id}`}
           state={{ fromHome: true }}
-          className="bubble-link flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+          className="bubble-link tap flex flex-col items-center gap-1.5"
         >
           <span className="w-[clamp(3.25rem,8.5dvh,4.75rem)] aspect-square rounded-full bubble flex items-center justify-center">
             <Icon className="w-[42%] h-[42%]" />
@@ -54,7 +54,7 @@ export default function Home() {
   const publicos = useMemo(() => publicBanners(events), [events])
 
   // Título sempre em uma linha: a fonte encolhe para nomes de cidade longos
-  const titleChars = (cityName ? `O que rola em ${cityName} hoje?` : 'O que rola por aqui hoje?').length
+  const titleChars = (cityName ? `O que rola em ${cityName}, hoje?` : 'O que rola por aqui, hoje?').length
   const titleSize = `clamp(1rem, calc((min(100vw, 42rem) - 2rem) / ${(titleChars * 0.56).toFixed(1)}), 1.75rem)`
 
   return (
@@ -66,22 +66,26 @@ export default function Home() {
           style={{ fontSize: titleSize }}
         >
           <span className="flex-none">{cityName ? 'O que rola em' : 'O que rola'}</span>
-          {cityName ? (
-            <span
-              key={cityName}
-              className={`min-w-0 truncate accent-text ${cityChanged ? 'city-swap' : ''}`}
-            >
-              {cityName}
-            </span>
-          ) : (
-            <button
-              onClick={requestGPS}
-              className={`accent-text ${geoLoading ? 'animate-pulse' : ''}`}
-              aria-label="Usar minha localização"
-            >
-              por aqui
-            </button>
-          )}
+          {/* A vírgula fica colada na cidade, fora do destaque amarelo */}
+          <span className="min-w-0 flex items-baseline">
+            {cityName ? (
+              <span
+                key={cityName}
+                className={`min-w-0 truncate accent-text ${cityChanged ? 'city-swap' : ''}`}
+              >
+                {cityName}
+              </span>
+            ) : (
+              <button
+                onClick={requestGPS}
+                className={`accent-text ${geoLoading ? 'animate-pulse' : ''}`}
+                aria-label="Usar minha localização"
+              >
+                por aqui
+              </button>
+            )}
+            <span className="flex-none">,</span>
+          </span>
           <span className="flex-none">hoje?</span>
         </h1>
 

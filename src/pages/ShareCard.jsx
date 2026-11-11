@@ -127,7 +127,7 @@ export default function ShareCard() {
           {/* Rodapé */}
           <div className="flex items-center justify-between pt-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.12)' }}>
             <span className="text-xs font-bold tracking-wider" style={{ color: 'rgba(245,240,232,0.45)' }}>
-              NA CIDADE APP
+              ONDEVOU
             </span>
             <div className="flex -space-x-1">
               {[...Array(3)].map((_, i) => (

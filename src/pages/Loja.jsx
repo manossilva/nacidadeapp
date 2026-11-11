@@ -3,10 +3,12 @@ import { useNavigate, useParams, useLocation as useRouterLocation } from 'react-
 import PageShell from '../components/layout/PageShell'
 import Avatar from '../components/ui/Avatar'
 import EventPost from '../components/cards/EventPost'
+import CoverBand from '../components/cards/CoverBand'
 import { IcChevronLeft, IcPin, IcPhone, IcChat, IcMap, IcGlobe, IcClock, IcStar } from '../components/ui/Icons'
 import { getPlace } from '../lib/googlePlaces'
 import { findExampleStore, storeFromPlace } from '../lib/stores'
 import { EXAMPLE_EVENTS } from '../lib/examples'
+import { isBar, hasCoverToday } from '../lib/cover'
 
 // Perfil da loja no formato do Instagram: avatar, números, bio, botões de
 // contato, horário e grade de fotos. Serve para lojas de exemplo e para
@@ -21,7 +23,7 @@ function Stat({ value, label }) {
 }
 
 function ActionButton({ icon: Icon, label, href, primary = false, disabled = false }) {
-  const className = `flex-1 min-w-0 h-9 px-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold active:scale-95 transition-transform ${
+  const className = `tap flex-1 min-w-0 h-9 px-2 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold ${
     primary ? 'bg-brand-400 text-ink-900' : 'glass text-ink-800 dark:text-sand-100'
   }`
   const content = <><Icon className="w-4 h-4 flex-none" /><span className="truncate">{label}</span></>
@@ -63,7 +65,7 @@ function StoreHeader({ title, onBack, example }) {
       <div className="max-w-2xl mx-auto px-4 h-14 flex items-center gap-3">
         <button
           onClick={onBack}
-          className="w-9 h-9 flex-none flex items-center justify-center rounded-xl glass ic active:scale-90 transition-transform"
+          className="tap w-9 h-9 flex-none flex items-center justify-center rounded-xl glass ic"
           aria-label="Voltar"
         >
           <IcChevronLeft className="w-5 h-5" />
@@ -126,6 +128,7 @@ export default function Loja() {
   const events = EXAMPLE_EVENTS.filter(e => e.store_id === store.id)
   const phoneDigits = store.phone?.replace(/\D/g, '')
   const openLabel = store.openNow === undefined ? null : store.openNow ? 'Aberto' : 'Fechado'
+  const bar = isBar({ category: store.category, types: place?.types })
 
   return (
     <PageShell header={header}>
@@ -139,7 +142,7 @@ export default function Loja() {
             {store.rating ? (
               <Stat
                 value={<span className="inline-flex items-center gap-1"><IcStar className="w-3.5 h-3.5 text-brand-500" filled />{store.rating.toFixed(1).replace('.', ',')}</span>}
-                label={`${store.ratingCount ?? 0} avaliações`}
+                label={store.ratingCount === 1 ? '1 avaliação' : `${store.ratingCount ?? 0} avaliações`}
               />
             ) : openLabel && (
               <Stat value={openLabel} label="agora" />
@@ -150,7 +153,7 @@ export default function Loja() {
         {/* Nome, categoria, bio */}
         <div className="mt-3">
           <p className="font-bold text-sm text-ink-900 dark:text-sand-50">{store.name}</p>
-          <p className="text-xs text-ink-500 dark:text-ink-400 capitalize">
+          <p className="text-xs text-ink-500 dark:text-ink-400">
             {[store.categoryLabel, store.rating ? openLabel : null].filter(Boolean).join(' · ')}
           </p>
           {store.bio && <p className="text-sm text-ink-700 dark:text-sand-200 mt-1.5 leading-snug">{store.bio}</p>}
@@ -161,6 +164,8 @@ export default function Loja() {
             </p>
           )}
         </div>
+
+        {bar && <CoverBand cover={hasCoverToday(store.id, events)} className="rounded-xl mt-3" />}
 
         {/* Contato */}
         <div className="flex gap-2 mt-4">

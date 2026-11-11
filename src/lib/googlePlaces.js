@@ -30,27 +30,12 @@ function apiKey() {
   return key
 }
 
-export async function searchNearby({ lat, lng, radiusMeters = 5000, type = null, maxResults = 20 }) {
-  const key = apiKey()
-
-  const body = {
-    locationRestriction: {
-      circle: {
-        center: { latitude: lat, longitude: lng },
-        radius: Math.min(radiusMeters, MAX_RADIUS_METERS),
-      },
-    },
-    maxResultCount: Math.min(maxResults, 20),
-    languageCode: 'pt-BR',
-  }
-
-  if (type) body.includedTypes = Array.isArray(type) ? type : [type]
-
-  const res = await fetch(`${BASE}/places:searchNearby`, {
+async function post(path, body) {
+  const res = await fetch(`${BASE}/${path}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'X-Goog-Api-Key': key,
+      'X-Goog-Api-Key': apiKey(),
       'X-Goog-FieldMask': FIELD_MASK,
     },
     body: JSON.stringify(body),
@@ -63,6 +48,34 @@ export async function searchNearby({ lat, lng, radiusMeters = 5000, type = null,
 
   const data = await res.json()
   return data.places ?? []
+}
+
+const circle = (lat, lng, radiusMeters) => ({
+  center: { latitude: lat, longitude: lng },
+  radius: Math.min(radiusMeters, MAX_RADIUS_METERS),
+})
+
+export function searchNearby({ lat, lng, radiusMeters = 5000, type = null, maxResults = 20 }) {
+  const body = {
+    locationRestriction: { circle: circle(lat, lng, radiusMeters) },
+    maxResultCount: Math.min(maxResults, 20),
+    languageCode: 'pt-BR',
+  }
+  if (type) body.includedTypes = Array.isArray(type) ? type : [type]
+  return post('places:searchNearby', body)
+}
+
+// Busca por texto — para os subgrupos que o Google não tem como tipo de lugar
+// (sebo, centro espírita, terreiro…). Aqui o círculo é só preferência: quem
+// chama descarta o que vier de fora do raio.
+export function searchText({ query, lat, lng, radiusMeters = 5000, maxResults = 20 }) {
+  return post('places:searchText', {
+    textQuery: query,
+    locationBias: { circle: circle(lat, lng, radiusMeters) },
+    pageSize: Math.min(maxResults, 20),
+    languageCode: 'pt-BR',
+    regionCode: 'BR',
+  })
 }
 
 // Um local pelo id — para abrir o perfil da loja por link direto
@@ -103,6 +116,22 @@ export function typeLabel(type) {
     art_gallery: 'Galeria', aquarium: 'Aquário', visitor_center: 'Centro de visitantes',
     movie_theater: 'Cinema', amusement_center: 'Diversão', amusement_park: 'Parque de diversões',
     bowling_alley: 'Boliche', zoo: 'Zoológico',
+    coffee_shop: 'Cafeteria', ice_cream_shop: 'Sorveteria', acai_shop: 'Açaiteria',
+    fast_food_restaurant: 'Lanchonete', hamburger_restaurant: 'Hamburgueria',
+    sandwich_shop: 'Lanchonete', pizza_restaurant: 'Pizzaria', steak_house: 'Churrascaria',
+    barbecue_restaurant: 'Churrascaria', seafood_restaurant: 'Frutos do mar',
+    brazilian_restaurant: 'Restaurante', japanese_restaurant: 'Restaurante japonês',
+    vegan_restaurant: 'Restaurante vegano', vegetarian_restaurant: 'Restaurante vegetariano',
+    confectionery: 'Confeitaria', dessert_shop: 'Doceria', candy_store: 'Doceria',
+    food_court: 'Praça de alimentação', juice_shop: 'Casa de sucos', pub: 'Bar',
+    library: 'Biblioteca', book_store: 'Livraria', performing_arts_theater: 'Teatro',
+    fitness_center: 'Academia', spa: 'Spa', hair_care: 'Salão', hair_salon: 'Salão',
+    barber_shop: 'Barbearia', pet_store: 'Pet shop', physiotherapist: 'Fisioterapia',
+    massage: 'Massagem', yoga_studio: 'Estúdio de yoga', wellness_center: 'Bem-estar',
+    place_of_worship: 'Templo', marina: 'Marina',
   }
-  return map[type] ?? type?.replace(/_/g, ' ') ?? 'Local'
+  if (map[type]) return map[type]
+  // Tipo sem tradução: mostra o nome do Google com a primeira letra maiúscula
+  const raw = type?.replace(/_/g, ' ')
+  return raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : 'Local'
 }

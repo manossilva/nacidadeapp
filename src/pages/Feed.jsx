@@ -30,7 +30,7 @@ function CommentInput({ onSubmit }) {
       <input
         value={text}
         onChange={e => setText(e.target.value)}
-        placeholder="Escreve aí..."
+        placeholder="Escreva aqui..."
         className="flex-1 rounded-xl px-3 py-2 text-sm focus:outline-none"
         style={{
           background: 'rgba(247,242,232,0.7)',
@@ -126,7 +126,7 @@ function FeedCard({ post, onColar, onComment }) {
             <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
-          {colado ? 'Colado' : 'Tô colado'}
+          {colado ? 'Colado' : 'Estou colado'}
           {post.colados > 0 && (
             <span
               className="ml-0.5 px-1.5 py-0.5 rounded-full text-[10px]"
@@ -273,7 +273,7 @@ export default function Feed() {
             style={{ background: 'rgba(240,235,226,0.95)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.6)' }}
           >
             <div className="w-10 h-1 rounded-full mx-auto mb-5" style={{ background: 'rgba(51,49,46,0.2)' }} />
-            <h2 className="font-bold text-lg mb-4" style={{ color: '#1f1e1c' }}>Onde você tá colado?</h2>
+            <h2 className="font-bold text-lg mb-4" style={{ color: '#1f1e1c' }}>Onde você está colado?</h2>
 
             <div className="space-y-2 max-h-40 overflow-y-auto mb-4">
               {allItems.map(item => (
@@ -301,7 +301,7 @@ export default function Feed() {
             <input
               value={checkin.msg}
               onChange={e => setCheckin(c => ({ ...c, msg: e.target.value }))}
-              placeholder="Conta alguma coisa (opcional)..."
+              placeholder="Conte alguma coisa (opcional)..."
               className="input mb-4"
             />
 

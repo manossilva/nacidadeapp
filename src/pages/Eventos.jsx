@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import PageShell from '../components/layout/PageShell'
 import EventPost from '../components/cards/EventPost'
+import Segmented from '../components/ui/Segmented'
 import { IcLandmark, IcCalendar } from '../components/ui/Icons'
 import { useEvents } from '../hooks/usePlaces'
 import { useLocation } from '../hooks/useLocation'
@@ -8,7 +9,8 @@ import { HOME_CATEGORIES } from '../lib/categories'
 import { PERIODS, inPeriod, isPublicEvent } from '../lib/events'
 import { EXAMPLE_EVENTS } from '../lib/examples'
 
-// Bolinha "diferente" dos eventos públicos, depois das 6 sessões
+// Bolinha dos eventos públicos — azul, a cor dos órgãos públicos. Vem na frente das
+// 6 sessões para aparecer sem precisar arrastar a fileira
 const PUBLIC_FILTER = { id: 'publico', label: 'Públicos', icon: IcLandmark }
 
 // Banco lento ou fora do ar: depois disso a agenda mostra os exemplos sem esperar
@@ -54,28 +56,15 @@ export default function Eventos() {
       </div>
 
       {/* Filtro 1 — quando */}
-      <div className="flex gap-1.5" role="group" aria-label="Período">
-        {PERIODS.map(p => (
-          <button
-            key={p.id}
-            onClick={() => setPeriod(p.id)}
-            aria-pressed={period === p.id}
-            className={`flex-auto px-2.5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
-              period === p.id ? 'pill-active' : 'pill'
-            }`}
-          >
-            {p.label}
-          </button>
-        ))}
-      </div>
+      <Segmented options={PERIODS} value={period} onChange={setPeriod} ariaLabel="Período" />
 
-      {/* Filtro 2 — o quê: as 6 sessões + eventos públicos, em fileira como os stories */}
+      {/* Filtro 2 — o quê: eventos públicos + as 6 sessões, em fileira como os stories */}
       <div
         className="flex gap-3 overflow-x-auto scrollbar-none -mx-4 px-4 pt-4 pb-1"
         role="group"
         aria-label="Tipo de evento"
       >
-        {[...HOME_CATEGORIES, PUBLIC_FILTER].map(({ id, label, icon: Icon }) => {
+        {[PUBLIC_FILTER, ...HOME_CATEGORIES].map(({ id, label, icon: Icon }) => {
           const active = filter === id
           const isPublic = id === PUBLIC_FILTER.id
           return (
@@ -83,15 +72,17 @@ export default function Eventos() {
               key={id}
               onClick={() => setFilter(active ? null : id)}
               aria-pressed={active}
-              className="flex-none w-16 flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+              className="tap flex-none w-16 flex flex-col items-center gap-1.5"
             >
               <span className={`w-14 h-14 rounded-full flex items-center justify-center ${
-                active ? 'bubble-current' : isPublic ? 'bubble-public' : 'bubble'
+                isPublic ? (active ? 'bubble-public-current' : 'bubble-public') : active ? 'bubble-current' : 'bubble'
               }`}>
                 <Icon className="w-6 h-6" />
               </span>
-              <span className={`text-[10px] font-bold uppercase tracking-wide whitespace-nowrap ${
-                active ? 'text-ink-900 dark:text-brand-400 black:text-white' : 'text-ink-500 dark:text-ink-400'
+              <span className={`text-[10px] font-bold uppercase tracking-wide whitespace-nowrap transition-colors ${
+                isPublic
+                  ? 'ic-public'
+                  : active ? 'text-ink-900 dark:text-brand-400 black:text-white' : 'text-ink-500 dark:text-ink-400'
               }`}>
                 {label}
               </span>
@@ -108,15 +99,22 @@ export default function Eventos() {
             ))}
           </div>
         ) : events.length === 0 ? (
-          <div className="py-12 text-center">
+          <div key={`${period}:${filter}`} className="rise py-12 text-center">
             <IcCalendar className="w-8 h-8 text-ink-300 dark:text-ink-600 mx-auto mb-2" />
             <p className="text-sm text-ink-500 dark:text-ink-400">
-              Nada {activeLabel ? `de ${activeLabel.toLowerCase()} ` : ''}na agenda para {PERIODS.find(p => p.id === period).label.toLowerCase()}.
+              {filter === PUBLIC_FILTER.id
+                ? 'Nenhum evento público'
+                : `Nada${activeLabel ? ` de ${activeLabel.toLowerCase()}` : ''}`}
+              {' '}na agenda para {PERIODS.find(p => p.id === period).when}.
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {events.map(e => <EventPost key={e.id} event={e} />)}
+          <div key={`${period}:${filter}`} className="space-y-4">
+            {events.map((e, i) => (
+              <div key={e.id} className="rise" style={{ '--i': i }}>
+                <EventPost event={e} />
+              </div>
+            ))}
           </div>
         )}
       </section>

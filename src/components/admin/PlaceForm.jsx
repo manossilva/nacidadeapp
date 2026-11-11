@@ -95,7 +95,7 @@ export default function PlaceForm({ initial = {}, onSaved, onCancel }) {
         </select>
       </Field>
 
-      <Field label="Descrição curta (máx. 140 chars)">
+      <Field label="Descrição curta (máx. 140 caracteres)">
         <input maxLength={140} value={form.short_description} onChange={e => set('short_description', e.target.value)} className="input" />
       </Field>
 
@@ -127,7 +127,7 @@ export default function PlaceForm({ initial = {}, onSaved, onCancel }) {
         </Field>
       </div>
 
-      <Field label="WhatsApp (ex: +5579999999999)">
+      <Field label="WhatsApp (ex.: +5579999999999)">
         <input value={form.whatsapp} onChange={e => set('whatsapp', e.target.value)} className="input" />
       </Field>
 

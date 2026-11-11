@@ -30,7 +30,7 @@ export default function Lugares() {
         {loading ? (
           <SkeletonGrid />
         ) : places.length === 0 ? (
-          <Empty text="Nenhum lugar nessa categoria ainda." />
+          <Empty text="Ainda não há lugares nesta categoria." />
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {places.map(p => <PlaceCard key={p.id} place={p} />)}

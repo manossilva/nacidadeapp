@@ -136,7 +136,7 @@ export default function EventForm({ initial = {}, onSaved, onCancel }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Preço (ex: Gratuito, R$ 30)</label>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Preço (ex.: Gratuito, R$ 30)</label>
         <input value={form.price_info} onChange={e => set('price_info', e.target.value)} className="input" />
       </div>
 
@@ -151,7 +151,7 @@ export default function EventForm({ initial = {}, onSaved, onCancel }) {
           <input value={form.organizer_name} onChange={e => set('organizer_name', e.target.value)} className="input" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp organizador</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">WhatsApp do organizador</label>
           <input value={form.organizer_whatsapp} onChange={e => set('organizer_whatsapp', e.target.value)} className="input" />
         </div>
       </div>

@@ -1,10 +1,11 @@
-// Regras da agenda: o que é evento público e em qual período cada evento cai
+// Regras da agenda: o que é evento público e em qual período cada evento cai.
+// `when` completa a frase "Nada na agenda para …"
 
 export const PERIODS = [
-  { id: 'hoje',    label: 'Hoje' },
-  { id: 'amanha',  label: 'Amanhã' },
-  { id: 'semana',  label: 'Esta semana' },
-  { id: 'proxima', label: 'Próxima semana' },
+  { id: 'hoje',    label: 'Hoje',           when: 'hoje' },
+  { id: 'amanha',  label: 'Amanhã',         when: 'amanhã' },
+  { id: 'semana',  label: 'Esta semana',    when: 'esta semana' },
+  { id: 'proxima', label: 'Próxima semana', when: 'a próxima semana' },
 ]
 
 // Público = marcado como tal ou organizado por órgão público

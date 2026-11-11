@@ -226,3 +226,118 @@ export const IcStore = ({ className = 'w-5 h-5' }) => (
     <path strokeLinecap="round" strokeLinejoin="round" d="M4 9.5V20h16V9.5M3 9.5L5 4h14l2 5.5a3 3 0 01-6 0 3 3 0 01-6 0 3 3 0 01-6 0zM10 20v-5h4v5" />
   </svg>
 )
+
+// ── Subgrupos das sessões ──
+const sub = (name, children) => {
+  const Icon = ({ className = 'w-5 h-5' }) => (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+      {children}
+    </svg>
+  )
+  Icon.displayName = name
+  return Icon
+}
+
+// Gastronomia
+export const IcCoffee = sub('IcCoffee', <>
+  <path d="M6 2v2M10 2v2M14 2v2" />
+  <path d="M16 8a1 1 0 011 1v8a4 4 0 01-4 4H7a4 4 0 01-4-4V9a1 1 0 011-1h14a4 4 0 110 8h-1" />
+</>)
+export const IcIceCream = sub('IcIceCream', <>
+  <path d="M7 11l4.08 10.35a1 1 0 001.84 0L17 11" />
+  <path d="M17 7A5 5 0 007 7" />
+  <path d="M17 7a2 2 0 010 4H7a2 2 0 010-4" />
+</>)
+export const IcBurger = sub('IcBurger', <>
+  <path d="M4 10.5C4 7.5 7.6 5 12 5s8 2.5 8 5.5H4z" />
+  <path d="M3.5 14h17" />
+  <path d="M4.5 17.5h15v.5a2 2 0 01-2 2h-11a2 2 0 01-2-2v-.5z" />
+</>)
+export const IcCake = sub('IcCake', <>
+  <path d="M20 21v-8a2 2 0 00-2-2H6a2 2 0 00-2 2v8" />
+  <path d="M4 16s.5-1 2-1 2.5 2 4 2 2.5-2 4-2 2.5 2 4 2 2-1 2-1" />
+  <path d="M2 21h20M7 8v3M12 8v3M17 8v3M7 4h.01M12 4h.01M17 4h.01" />
+</>)
+export const IcApple = sub('IcApple', <>
+  <path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0017 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 00-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06z" />
+  <path d="M10 2c1 .5 2 2 2 5" />
+</>)
+export const IcTray = sub('IcTray', <>
+  <path d="M3 17h18" />
+  <path d="M5 17a7 7 0 0114 0" />
+  <path d="M12 7v3M10.5 7h3" />
+  <path d="M4 20.5h16" />
+</>)
+
+// Cultura
+export const IcFilm = sub('IcFilm', <>
+  <path d="M20.2 6L3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" />
+  <path d="M6.2 5.3l3.1 3.9M12.4 3.4l3.1 4" />
+  <path d="M3 11h18v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+</>)
+export const IcLibrary = sub('IcLibrary', <>
+  <path d="M16 6l4 14M12 6v14M8 8v12M4 4v16" />
+</>)
+export const IcBookStack = sub('IcBookStack', <>
+  <rect x="4" y="15.5" width="16" height="4.5" rx="1" />
+  <rect x="6.5" y="11" width="13" height="4.5" rx="1" />
+  <rect x="5" y="6.5" width="12" height="4.5" rx="1" />
+</>)
+export const IcBookOpen = sub('IcBookOpen', <>
+  <path d="M12 7v14" />
+  <path d="M3 18a1 1 0 01-1-1V4a1 1 0 011-1h5a4 4 0 014 4 4 4 0 014-4h5a1 1 0 011 1v13a1 1 0 01-1 1h-6a3 3 0 00-3 3 3 3 0 00-3-3z" />
+</>)
+
+// Bem-estar
+export const IcDumbbell = sub('IcDumbbell', <>
+  <rect x="5" y="7" width="3" height="10" rx="1" />
+  <rect x="16" y="7" width="3" height="10" rx="1" />
+  <path d="M8 12h8M2.5 10v4M21.5 10v4" />
+</>)
+export const IcPaw = sub('IcPaw', <>
+  <circle cx="11" cy="4" r="2" />
+  <circle cx="18" cy="8" r="2" />
+  <circle cx="20" cy="16" r="2" />
+  <path d="M9 10a5 5 0 015 5v3.5a3.5 3.5 0 01-6.84 1.045Q6.52 17.48 4.46 16.84A3.5 3.5 0 015.5 10z" />
+</>)
+export const IcLotus = sub('IcLotus', <>
+  <path d="M12 5c2.2 2.4 3.3 5 3.3 7.5S13.5 17 12 18c-1.5-1-3.3-3-3.3-5.5S9.8 7.4 12 5z" />
+  <path d="M8.9 11.6C7.2 10.4 5.2 9.8 3 9.8c0 3.8 2.8 7.6 9 8.2" />
+  <path d="M15.1 11.6c1.7-1.2 3.7-1.8 5.9-1.8 0 3.8-2.8 7.6-9 8.2" />
+  <path d="M7 21h10" />
+</>)
+export const IcStones = sub('IcStones', <>
+  <ellipse cx="12" cy="18" rx="7" ry="2.6" />
+  <ellipse cx="12" cy="12.4" rx="5" ry="2.3" />
+  <ellipse cx="12" cy="7.3" rx="3.2" ry="2" />
+</>)
+export const IcScissors = sub('IcScissors', <>
+  <circle cx="6" cy="6" r="3" />
+  <circle cx="6" cy="18" r="3" />
+  <path d="M8.12 8.12L12 12M20 4L8.12 15.88M14.8 14.8L20 20" />
+</>)
+
+// Religião
+export const IcLatinCross = sub('IcLatinCross', <>
+  <path d="M12 3v18M7 8.5h10" />
+</>)
+export const IcBible = sub('IcBible', <>
+  <path d="M6.5 3H19v18H6.5A2.5 2.5 0 014 18.5v-13A2.5 2.5 0 016.5 3z" />
+  <path d="M4 18.5A2.5 2.5 0 016.5 16H19" />
+  <path d="M12 6.5v5.5M10 8.5h4" />
+</>)
+export const IcSparkles = sub('IcSparkles', <>
+  <path d="M9.937 15.5A2 2 0 008.5 14.063l-6.135-1.582a.5.5 0 010-.962L8.5 9.936A2 2 0 009.937 8.5l1.582-6.135a.5.5 0 01.963 0L14.063 8.5A2 2 0 0015.5 9.937l6.135 1.581a.5.5 0 010 .964L15.5 14.063a2 2 0 00-1.437 1.437l-1.582 6.135a.5.5 0 01-.963 0z" />
+  <path d="M20 3v4M22 5h-4M4 17v2M5 18H3" />
+</>)
+export const IcDrum = sub('IcDrum', <>
+  <ellipse cx="12" cy="6" rx="6" ry="2.5" />
+  <path d="M6 6l1.6 12.6c.2 1.3 2 2.4 4.4 2.4s4.2-1.1 4.4-2.4L18 6" />
+  <path d="M9.2 8.3l.9 12.4M14.8 8.3l-.9 12.4" />
+</>)
+
+// Tarja dos bares
+export const IcMic = sub('IcMic', <>
+  <rect x="9" y="2.5" width="6" height="11" rx="3" />
+  <path d="M5.5 11a6.5 6.5 0 0013 0M12 17.5V21M8.5 21h7" />
+</>)

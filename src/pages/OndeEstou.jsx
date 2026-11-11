@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useLocation as useRouterLocation } from 'react-router-dom'
 import PageShell from '../components/layout/PageShell'
 import EventPost from '../components/cards/EventPost'
+import Avatar from '../components/ui/Avatar'
 import { IcPin, IcLandmark, IcGlobe, IcMegaphone, IcUsers } from '../components/ui/Icons'
 import { useEvents } from '../hooks/usePlaces'
 import { useLocation } from '../hooks/useLocation'
@@ -10,7 +11,6 @@ import { isPublicEvent } from '../lib/events'
 import { EXAMPLE_EVENTS } from '../lib/examples'
 
 const AGENDA_ID = 'agenda-publica'
-const RECENT_MAYORS = 5
 
 function SectionCard({ icon: Icon, title, children, id }) {
   return (
@@ -62,6 +62,7 @@ function CityHero({ info }) {
 
 function History({ info }) {
   const [open, setOpen] = useState(false)
+  const body = useRef(null)
   const blocks = [
     ...(info.intro ?? []).map(text => ({ type: 'p', text })),
     ...(info.history?.blocks ?? []),
@@ -71,19 +72,25 @@ function History({ info }) {
 
   return (
     <SectionCard icon={IcGlobe} title="História da cidade">
-      <div className={`relative ${!open && long ? 'max-h-48 overflow-hidden' : ''}`}>
-        <div className="space-y-2.5 text-sm leading-relaxed text-ink-700 dark:text-sand-200">
+      {/* Recolhida mostra 12rem; aberta cresce até a altura real do texto */}
+      <div
+        className="relative overflow-hidden transition-[max-height] duration-700 ease-[cubic-bezier(0.32,0.72,0,1)]"
+        style={{ maxHeight: !long ? 'none' : open ? body.current?.scrollHeight ?? 'none' : '12rem' }}
+      >
+        <div ref={body} className="space-y-2.5 text-sm leading-relaxed text-ink-700 dark:text-sand-200">
           {blocks.map((b, i) =>
             b.type === 'h'
               ? <h3 key={i} className="font-bold text-ink-900 dark:text-sand-50 pt-1">{b.text}</h3>
               : <p key={i}>{b.text}</p>
           )}
         </div>
-        {!open && long && <div className="history-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none" />}
+        {long && (
+          <div className={`history-fade absolute inset-x-0 bottom-0 h-16 pointer-events-none transition-opacity duration-500 ${open ? 'opacity-0' : ''}`} />
+        )}
       </div>
       <div className="flex items-center justify-between mt-3">
         {long ? (
-          <button onClick={() => setOpen(o => !o)} className="text-xs font-bold text-ink-800 dark:text-brand-400 black:text-white">
+          <button onClick={() => setOpen(o => !o)} className="tap text-xs font-bold text-ink-800 dark:text-brand-400 black:text-white">
             {open ? 'Mostrar menos' : 'Ler a história completa'}
           </button>
         ) : <span />}
@@ -113,48 +120,69 @@ function PeopleList({ people }) {
   )
 }
 
+// "2021–2024" e "2025–2028" → "Mandatos 2021–2024 e 2025–2028"
+function termsLabel(terms = []) {
+  if (!terms.length) return null
+  return `${terms.length > 1 ? 'Mandatos' : 'Mandato'} ${terms.join(' e ')}`
+}
+
+// Só quem está no cargo: prefeito e vice. Depois, os vereadores.
 function Government({ info }) {
-  const [allMayors, setAllMayors] = useState(false)
-  // A Wikipédia lista do mais antigo ao mais novo; aqui o mais recente vem primeiro
-  const mayors = info.mayors?.people?.length ? [...info.mayors.people].reverse() : []
-  const shown = allMayors ? mayors : mayors.slice(0, RECENT_MAYORS)
+  const { mayor, vice } = info
+  const [photoErr, setPhotoErr] = useState(false)
 
   return (
     <SectionCard icon={IcLandmark} title="Prefeitura e Câmara">
-      <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">Prefeito(a) atual</p>
-      <p className="text-base font-bold text-ink-900 dark:text-sand-50">{info.mayor ?? 'Não informado'}</p>
+      {mayor ? (
+        <div className="flex items-center gap-3.5">
+          {mayor.photoUrl && !photoErr ? (
+            <img
+              src={mayor.photoUrl}
+              alt={`Foto de ${mayor.name}`}
+              onError={() => setPhotoErr(true)}
+              className="w-[4.5rem] h-[4.5rem] flex-none rounded-2xl object-cover object-top bg-sand-200 dark:bg-ink-800"
+            />
+          ) : (
+            <Avatar name={mayor.name} className="w-[4.5rem] h-[4.5rem]" tone="civic" />
+          )}
+          <div className="min-w-0">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">{mayor.title}</p>
+            <p className="text-base font-bold leading-tight text-ink-900 dark:text-sand-50">{mayor.name}</p>
+            <p className="text-xs text-ink-500 dark:text-ink-400 mt-0.5">
+              {[partyAcronym(mayor.party), termsLabel(mayor.terms)].filter(Boolean).join(' · ')}
+            </p>
+            {mayor.reelected && (
+              <span className="inline-block mt-1.5 rounded-full bg-civic-600/10 dark:bg-civic-400/15 ic-public px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+                Reeleição
+              </span>
+            )}
+          </div>
+        </div>
+      ) : (
+        <>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">Prefeito(a)</p>
+          <p className="text-sm text-ink-500 dark:text-ink-400">A Wikipédia não informa quem está no cargo.</p>
+        </>
+      )}
+
+      <div className="mt-4 pt-3 border-t border-ink-900/10 dark:border-white/10">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-ink-400">{vice?.title ?? 'Vice-prefeito(a)'}</p>
+        {vice ? (
+          <p className="text-sm font-bold text-ink-900 dark:text-sand-50">{vice.name}</p>
+        ) : (
+          <p className="text-xs text-ink-400">A Wikipédia ainda não informa o vice desta cidade.</p>
+        )}
+      </div>
+
       {info.website && (
         <a
           href={info.website}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 mt-2 text-xs font-bold text-ink-800 dark:text-brand-400 black:text-white"
+          className="tap inline-flex items-center gap-1.5 mt-3 text-xs font-bold text-ink-800 dark:text-brand-400 black:text-white"
         >
           <IcGlobe className="w-3.5 h-3.5" /> Site da prefeitura
         </a>
-      )}
-
-      <h3 className="text-xs font-bold text-ink-900 dark:text-sand-50 mt-5 mb-1">Prefeitos</h3>
-      {mayors.length ? (
-        <>
-          <PeopleList people={shown} />
-          {mayors.length > RECENT_MAYORS && (
-            <button onClick={() => setAllMayors(v => !v)} className="mt-2 text-xs font-bold text-ink-800 dark:text-brand-400 black:text-white">
-              {allMayors ? 'Mostrar só os mais recentes' : `Ver todos os ${mayors.length}`}
-            </button>
-          )}
-        </>
-      ) : info.mayors?.url ? (
-        <a
-          href={info.mayors.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-xs font-bold text-ink-800 dark:text-brand-400 black:text-white underline"
-        >
-          Ver a lista de prefeitos na Wikipédia
-        </a>
-      ) : (
-        <p className="text-xs text-ink-400">A Wikipédia ainda não traz a lista de prefeitos desta cidade.</p>
       )}
 
       <h3 className="flex items-center gap-1.5 text-xs font-bold text-ink-900 dark:text-sand-50 mt-5 mb-1">
@@ -210,7 +238,7 @@ export default function OndeEstou() {
               <p className="text-sm font-semibold text-ink-700 dark:text-sand-200">Ative a localização</p>
               <p className="text-xs text-ink-400 mt-0.5">Para contar a história da cidade onde você está</p>
             </div>
-            <button onClick={requestGPS} className="text-xs font-bold text-ink-700 dark:text-sand-200 whitespace-nowrap">
+            <button onClick={requestGPS} className="tap text-xs font-bold text-ink-700 dark:text-sand-200 whitespace-nowrap">
               Ativar →
             </button>
           </div>
@@ -253,13 +281,17 @@ export default function OndeEstou() {
         {/* Agenda pública */}
         <section id={AGENDA_ID} className="mt-6 scroll-mt-16">
           <h2 className="flex items-center gap-2 text-lg font-extrabold text-ink-900 dark:text-sand-50">
-            <IcMegaphone className="w-5 h-5 ic" /> Agenda pública
+            <IcMegaphone className="w-5 h-5 ic-public" /> Agenda pública
           </h2>
           <p className="text-xs text-ink-500 dark:text-ink-400 mt-0.5 mb-4">
             Avisos, festas e serviços {info?.name ? `de ${info.name}` : 'da cidade'} para moradores e visitantes
           </p>
           <div className="space-y-4">
-            {agenda.map(e => <EventPost key={e.id} event={e} />)}
+            {agenda.map((e, i) => (
+              <div key={e.id} className="rise" style={{ '--i': i }}>
+                <EventPost event={e} />
+              </div>
+            ))}
           </div>
         </section>
 

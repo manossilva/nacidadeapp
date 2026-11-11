@@ -71,7 +71,7 @@ export default function Explore() {
           loadingPlaces ? (
             <SkeletonList count={6} />
           ) : places.length === 0 ? (
-            <Empty text="Nenhum local encontrado nessa categoria." />
+            <Empty text="Nenhum local encontrado nesta categoria." />
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {places.map(p => <PlaceCard key={p.id} place={p} />)}
@@ -81,7 +81,7 @@ export default function Explore() {
           loadingEvents ? (
             <SkeletonList count={6} />
           ) : events.length === 0 ? (
-            <Empty text="Nenhum evento nesse período." />
+            <Empty text="Nenhum evento neste período." />
           ) : (
             <div className="grid grid-cols-2 gap-3">
               {events.map(e => <EventCard key={e.id} event={e} />)}

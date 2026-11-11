@@ -204,7 +204,7 @@ export default function Register() {
           </button>
 
           <p className="text-xs text-ink-400 text-center pt-1">
-            Ao criar uma conta você concorda com nossos termos de uso.
+            Ao criar uma conta, você concorda com nossos termos de uso.
           </p>
 
         </form>

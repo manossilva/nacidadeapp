@@ -12,11 +12,11 @@ import { LOGIN_TYPES } from '../lib/loginTypes'
 
 const LOGIN_ICONS = { usuario: IcUser, parceiro: IcStore, orgao: IcLandmark }
 
-function Row({ icon, label, children }) {
+function Row({ icon, label, children, iconClass = 'ic' }) {
   return (
     <div className="flex items-center justify-between py-3.5 border-b border-white/10 last:border-0">
       <div className="flex items-center gap-3">
-        <span className="ic">{icon}</span>
+        <span className={iconClass}>{icon}</span>
         <span className="text-sm font-medium text-ink-700 dark:text-sand-200">{label}</span>
       </div>
       {children}
@@ -62,7 +62,7 @@ export default function Settings() {
               <button
                 key={id}
                 onClick={() => setTheme(id)}
-                className={`flex flex-col items-center gap-2 py-3 rounded-2xl border transition-all ${
+                className={`tap flex flex-col items-center gap-2 py-3 rounded-2xl border ${
                   active
                     ? 'bubble-active border-transparent'
                     : 'glass ic border-white/30'
@@ -105,10 +105,10 @@ export default function Settings() {
           Object.entries(LOGIN_TYPES).map(([tipo, { menuLabel }]) => {
             const Icon = LOGIN_ICONS[tipo]
             return (
-              <Row key={tipo} icon={<Icon className="w-4 h-4" />} label={menuLabel}>
+              <Row key={tipo} icon={<Icon className="w-4 h-4" />} label={menuLabel} iconClass={tipo === 'orgao' ? 'ic-public' : 'ic'}>
                 <button
                   onClick={() => navigate(`/login?tipo=${tipo}`)}
-                  className="text-sm font-semibold text-ink-700 dark:text-sand-200 flex items-center gap-1"
+                  className="tap text-sm font-semibold text-ink-700 dark:text-sand-200 flex items-center gap-1"
                 >
                   Entrar <IcChevronRight className="w-3.5 h-3.5" />
                 </button>

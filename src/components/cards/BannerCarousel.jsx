@@ -5,15 +5,16 @@ import { Link } from 'react-router-dom'
 // altura que sobrar na Home (o texto se adapta via container query no CSS)
 const OVERLAY = 'linear-gradient(to top, rgba(14,14,13,0.92) 0%, rgba(14,14,13,0.45) 55%, rgba(14,14,13,0.12) 100%)'
 
+// Lojas em amarelo; órgãos públicos em azul
 const VARIANTS = {
-  privado: { label: 'Eventos privados', fallback: 'linear-gradient(135deg, #4a3f00, #c9aa00)' },
-  publico: { label: 'Eventos públicos', fallback: 'linear-gradient(135deg, #1f1e1c, #64615a)' },
+  privado: { label: 'Eventos privados', fallback: 'linear-gradient(135deg, #4a3f00, #c9aa00)', dot: 'bg-brand-400', arrow: 'bg-brand-400 text-ink-900' },
+  publico: { label: 'Eventos públicos', fallback: 'linear-gradient(135deg, #152a63, #2563eb)', dot: 'bg-civic-400', arrow: 'bg-civic-600 text-white' },
 }
 
 function Slide({ item, variant, active }) {
   const [imgErr, setImgErr] = useState(false)
   const [imgLoaded, setImgLoaded] = useState(false)
-  const { label, fallback } = VARIANTS[variant]
+  const { label, fallback, dot, arrow } = VARIANTS[variant]
 
   return (
     <>
@@ -32,9 +33,9 @@ function Slide({ item, variant, active }) {
       )}
       <div className="absolute inset-0" style={{ background: OVERLAY }} />
 
-      {/* Etiqueta mínima: ponto amarelo + tipo do evento */}
+      {/* Etiqueta mínima: ponto colorido + tipo do evento */}
       <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 rounded-full bg-black/35 backdrop-blur-sm px-2.5 py-1 text-[11px] font-medium text-white">
-        <span className="w-1.5 h-1.5 rounded-full bg-brand-400" />
+        <span className={`w-1.5 h-1.5 rounded-full ${dot}`} />
         {label}
       </span>
 
@@ -48,7 +49,7 @@ function Slide({ item, variant, active }) {
         )}
       </div>
 
-      <span className="absolute bottom-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold bg-brand-400 text-ink-900">
+      <span className={`absolute bottom-4 right-4 w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${arrow}`}>
         →
       </span>
     </>
@@ -89,7 +90,7 @@ export default function BannerCarousel({ items, variant = 'privado', interval = 
     <section
       aria-roledescription="carrossel"
       aria-label={VARIANTS[variant].label}
-      className={`banner relative rounded-3xl overflow-hidden ${className}`}
+      className={`banner tap relative rounded-3xl overflow-hidden ${className}`}
       style={{ boxShadow: '0 6px 24px rgba(0,0,0,0.12)' }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
@@ -114,7 +115,7 @@ export default function BannerCarousel({ items, variant = 'privado', interval = 
               key={item.id}
               onClick={() => setIndex(i)}
               aria-label={`Mostrar banner ${i + 1} de ${count}`}
-              className={`h-1.5 rounded-full transition-all ${i === current ? 'w-5 bg-brand-400' : 'w-1.5 bg-white/50'}`}
+              className={`h-1.5 rounded-full transition-all duration-500 ${i === current ? `w-5 ${VARIANTS[variant].dot}` : 'w-1.5 bg-white/50'}`}
             />
           ))}
         </div>

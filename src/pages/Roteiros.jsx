@@ -11,7 +11,7 @@ const ROTEIROS = [
     duration: '1 dia',
     difficulty: 'Fácil',
     stops: [
-      { name: 'Orla de Atalaia', desc: 'Ponto de partida — café da manhã beira-mar', time: '08:00' },
+      { name: 'Orla de Atalaia', desc: 'Ponto de partida — café da manhã à beira-mar', time: '08:00' },
       { name: 'Mercado Municipal', desc: 'Arte, artesanato e tapioca fresca', time: '10:00' },
       { name: 'Centro Histórico', desc: 'Catedral e Praça General Valadão', time: '12:00' },
       { name: 'Museu da Gente Sergipana', desc: 'Cultura sergipana interativa', time: '14:00' },
@@ -44,7 +44,7 @@ const ROTEIROS = [
       { name: 'Centro de Criatividade', desc: 'Arte contemporânea local', time: '11:00' },
       { name: 'Mercado Thales Ferraz', desc: 'Comida típica e artesanato', time: '13:00' },
       { name: 'Teatro Atheneu', desc: 'Arquitetura histórica', time: '15:00' },
-      { name: 'Casa de Cultura', desc: 'Forró pé-de-serra à noite', time: '19:00' },
+      { name: 'Casa de Cultura', desc: 'Forró pé de serra à noite', time: '19:00' },
     ],
     cover: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&q=80',
     tags: ['museus', 'história', 'forró'],
